@@ -1,14 +1,6 @@
 <div class="wrap woocommerce">
   <h1>MeiliSearch</h1>
   <form method="post" id="mainform" action="" enctype="multipart/form-data">
-    <nav class="nav-tab-wrapper" style="margin: 1.5em 0 1em;">
-      <a href="http://petnat.test/wp-admin/admin.php?page=woocommerce-meilisearch&amp;tab=indexes" class="nav-tab">
-        Indexes
-      </a>
-      <a href="http://petnat.test/wp-admin/admin.php?page=woocommerce-meilisearch&amp;tab=settings" class="nav-tab nav-tab-active">
-        Settings
-      </a>
-    </nav>
     <h1 class="screen-reader-text">Settings</h1>
     <table class="form-table">
       <tbody>

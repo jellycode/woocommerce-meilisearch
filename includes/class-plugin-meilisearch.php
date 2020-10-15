@@ -12,6 +12,8 @@ class WooCommerceMeiliSearch
 
 /**
  * llWcmsAddAdminMenuPage.
+ *
+ * @return  void
  */
 function llWcmsAddAdminMenuPage() {
     add_menu_page(
@@ -44,16 +46,72 @@ function llWcmsAddAdminMenuPage() {
 }
 add_action('admin_menu', 'llWcmsAddAdminMenuPage');
 
+/**
+ * llWcmsGetClient
+ * 
+ * @return \MeiliSearch\Client
+ */
+function llWcmsGetClient()
+{
+    return new Client('http://188.166.32.110:7700', 'KWzsqSuOT45Jj9Gnw0RF');
+}
+
+/**
+ * llWcmsEmptyIndex.
+ * 
+ * @param  string $name
+ * @return bool      
+ */
+function llWcmsEmptyIndex(string $name): bool
+{
+    $client = llWcmsGetClient();
+    $client->getIndex($name)->deleteAllDocuments();
+
+    return true;
+}
+
+/**
+ * llWcmsUpdatePost.
+ * 
+ * @param  [type]  $id     
+ * @param  WP_Post $post   
+ * @param  [type]  $update 
+ * @return [type]          
+ */
 function llWcmsUpdatePost($id, WP_Post $post, $update)
 {
     if (get_post_type() !== 'product' || wp_is_post_revision($id) || wp_is_post_autosave($id)) {
         return $post;
     }
 
-    $client = new Client('http://188.166.32.110:7700', 'KWzsqSuOT45Jj9Gnw0RF');
+    $product = new WC_Product($post->ID);
 
-    $client->getIndex('wcms_products')->addDocuments([
-        $post
+    $woocommerceProduct = [
+        'ID' => $product->get_ID(),
+        'attributes' => $product->get_attributes(),
+        'categories' => get_the_terms($product->get_ID(), 'product_cat'),
+        'featured' => $product->get_featured(),
+        'images' => [],
+        'name' => $product->get_title(),
+        'on_sale' => $product->is_on_sale(),
+        'parent_id' => $product->get_parent_id(),
+        'permalink' => $product->get_permalink(),
+        'price' => (float) $product->get_price(),
+        'price_html' => $product->get_price_html(),
+        'regular_price' => (float) $product->get_regular_price(),
+        'sale_price' => (float) $product->get_sale_price(),
+        'sku' => $product->get_sku(),
+        'slug' => $product->get_slug(),
+        'status' => $product->get_status(),
+        'stock_quantity' => $product->get_stock_quantity(),
+        'stock_status' => $product->get_stock_status(),
+        'tags' => wp_get_object_terms($product->get_ID(), 'product_tag'),
+    ];
+
+    $client = llWcmsGetClient();
+    // $client->getIndex('wcms_products')->deleteAllDocuments();
+    $result = $client->getIndex('wcms_products')->addDocuments([
+        $woocommerceProduct
     ]);
 
     // $record = (array) apply_filters($post->post_type.'_to_record', $post);

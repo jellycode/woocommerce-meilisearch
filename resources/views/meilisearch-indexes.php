@@ -5,14 +5,6 @@ $client = new \MeiliSearch\Client('http://188.166.32.110:7700', 'KWzsqSuOT45Jj9G
 <div class="wrap woocommerce">
   <h1>MeiliSearch</h1>
   <form method="post" id="mainform" action="" enctype="multipart/form-data">
-    <nav class="nav-tab-wrapper" style="margin: 1.5em 0 1em;">
-      <a href="http://petnat.test/wp-admin/admin.php?page=woocommerce-meilisearch&amp;tab=indexes" class="nav-tab nav-tab-active">
-        Indexes
-      </a>
-      <a href="http://petnat.test/wp-admin/admin.php?page=woocommerce-meilisearch&amp;tab=settings" class="nav-tab">
-        Settings
-      </a>
-    </nav>
     <h1 class="screen-reader-text">Indexes</h1>
   </form>
 
@@ -21,14 +13,23 @@ $client = new \MeiliSearch\Client('http://188.166.32.110:7700', 'KWzsqSuOT45Jj9G
   <?php 
   echo '<ul style="list-style: disc; padding-left: 20px;">';
   foreach ($indexes as $index) {
-    $documents = $index->getDocuments(['limit' => 20]);
+    $documents = $index->getDocuments();
     echo '<li>'.$index->getUid().' ('.count($documents).' documents)</li>';
     echo '<ul style="list-style: disc; padding-left: 20px;">';
     foreach ($documents as $document) {
-      echo '<li>'.$document['ID'].' - '.$document['post_title'].'</li>';
+      $documentPreview = $document;
+      echo '<li>'.$document['ID'].' - '.$document['name'].'</li>';
     };
     echo '</ul>';
   } 
+  echo '</ul>';
+
+  echo '<h3>Document preview</h3>';
+  echo '<ul style="list-style: disc; padding-left: 20px;">';
+  foreach ($documentPreview as $key => $value) {
+    if (! is_string($value)) $value = print_r($value, true);
+    echo '<li>'.$key.' : '.$value.'</li>';
+  }
   echo '</ul>';
   ?>
 </div>
