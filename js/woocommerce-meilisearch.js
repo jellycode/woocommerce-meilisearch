@@ -20,7 +20,7 @@ function searchWooCommerceMeiliSearch(terms) {
     
     let html = '<ul>'
     result.hits.forEach(hit => {
-      html += `<li>${hit.name} - ${hit.price_html}</li>`
+      html += `<li>${hit.name} - ${hit.price_html} - ${hit.stock_quantity || 0} units</li>`
     })
     html += '</ul>'
     el.innerHTML = html

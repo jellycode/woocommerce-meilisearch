@@ -109,30 +109,30 @@ function llWcmsUpdatePost($id, WP_Post $post, $update)
     ];
 
     $client = llWcmsGetClient();
-    // $client->getIndex('wcms_products')->deleteAllDocuments();
-    $result = $client->getIndex('wcms_products')->addDocuments([
+    $index = $client->getIndex('wcms_products');
+
+    $result = $index->addDocuments([
         $document
     ]);
 
-    // $document = (array) apply_filters($post->post_type.'_to_record', $post);
-
-    // if (!isset($document['objectID'])) {
-    //     $document['objectID'] = implode('#', [$post->post_type, $post->ID]);
-    // }
-
-    // $index = $algolia->initIndex(
-    //     apply_filters('algolia_index_name', $post->post_type)
-    // );
-
-    // if ('trash' == $post->post_status) {
-    //     $index->deleteObject($document['objectID']);
-    // } else {
-    //     $index->saveObject($document);
-    // }
+    if ('trash' == $post->post_status) {
+        $index->deleteDocument($document['ID']);
+    }
 
     return $post;
 }
 add_action('save_post', 'llWcmsUpdatePost', 10, 3);
+
+/**
+ * llWcmsUpdatePostStock
+ * @param  [type] $order_id 
+ * @return [type]           
+ */
+function llWcmsUpdatePostStock($order_id)
+{
+    return $order_id;
+}
+add_action('woocommerce_reduce_order_stock', 'llWcmsUpdatePostStock');
 
 /**
  * llWcmsReIndex
