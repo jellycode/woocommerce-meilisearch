@@ -9,7 +9,7 @@
             <label for="meilisearch_hostname">Hostname</label>
           </th>
           <td class="forminp forminp-text">
-            <input name="meilisearch_hostname" id="meilisearch_hostname" class="regular-text" type="text" value="188.166.32.110">
+            <input name="meilisearch_hostname" id="meilisearch_hostname" class="regular-text" type="text" value="">
             <p class="description" id="meilisearch_hostname-description">In most cases the IP address of the server.</p>
           </td>
         </tr>
@@ -18,7 +18,7 @@
             <label for="meilisearch_port">Port</label>
           </th>
           <td class="forminp forminp-text">
-            <input name="meilisearch_port" id="meilisearch_port" class="regular-text" type="text" value="7700">
+            <input name="meilisearch_port" id="meilisearch_port" class="regular-text" type="text" value="">
             <p class="description" id="meilisearch_hostname-description">Default port for MeiliSearch is 7070.</p>
           </td>
         </tr>
@@ -27,7 +27,7 @@
             <label for="meilisearch_master_key">Master Key</label>
           </th>
           <td class="forminp forminp-text">
-            <input name="meilisearch_master_key" id="meilisearch_master_key" class="regular-text" type="text" value="KWzsqSuOT45Jj9Gnw0RF">
+            <input name="meilisearch_master_key" id="meilisearch_master_key" class="regular-text" type="text" value="">
             <p class="description" id="meilisearch_hostname-description">The master key will be stored in plain text. For improved security, we highly recommend using your site's WordPress configuration file to set your master key according to the following definition:<br>
             <br>
             <code>define( 'WCMS_MASTER_KEY', '' );</code></p>

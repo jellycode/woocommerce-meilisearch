@@ -86,7 +86,7 @@ function llWcmsUpdatePost($id, WP_Post $post, $update)
 
     $product = new WC_Product($post->ID);
 
-    $woocommerceProduct = [
+    $document = [
         'ID' => $product->get_ID(),
         'attributes' => $product->get_attributes(),
         'categories' => get_the_terms($product->get_ID(), 'product_cat'),
@@ -111,13 +111,13 @@ function llWcmsUpdatePost($id, WP_Post $post, $update)
     $client = llWcmsGetClient();
     // $client->getIndex('wcms_products')->deleteAllDocuments();
     $result = $client->getIndex('wcms_products')->addDocuments([
-        $woocommerceProduct
+        $document
     ]);
 
-    // $record = (array) apply_filters($post->post_type.'_to_record', $post);
+    // $document = (array) apply_filters($post->post_type.'_to_record', $post);
 
-    // if (!isset($record['objectID'])) {
-    //     $record['objectID'] = implode('#', [$post->post_type, $post->ID]);
+    // if (!isset($document['objectID'])) {
+    //     $document['objectID'] = implode('#', [$post->post_type, $post->ID]);
     // }
 
     // $index = $algolia->initIndex(
@@ -125,11 +125,72 @@ function llWcmsUpdatePost($id, WP_Post $post, $update)
     // );
 
     // if ('trash' == $post->post_status) {
-    //     $index->deleteObject($record['objectID']);
+    //     $index->deleteObject($document['objectID']);
     // } else {
-    //     $index->saveObject($record);
+    //     $index->saveObject($document);
     // }
 
     return $post;
 }
 add_action('save_post', 'llWcmsUpdatePost', 10, 3);
+
+/**
+ * llWcmsReIndex
+ * @param  string $index 
+ * @return void        
+ */
+function llWcmsReIndex($index)
+{
+    $client = llWcmsGetClient();
+    $client->getIndex($index)->deleteAllDocuments();
+
+    $paged = 1;
+    $count = 0;
+    do {
+        $posts = new WP_Query([
+            'posts_per_page' => 10,
+            'paged' => $paged,
+            'post_type' => 'product',
+            'post_status' => 'publish',
+            'suppress_filters' => true,
+        ]);
+
+        if (! $posts->have_posts()) {
+            break;
+        }
+
+        $documents = [];
+        foreach ($posts->posts as $post) {
+            $product = new WC_Product($post->ID);
+
+            $document = [
+                'ID' => $product->get_ID(),
+                'attributes' => $product->get_attributes(),
+                'categories' => get_the_terms($product->get_ID(), 'product_cat'),
+                'featured' => $product->get_featured(),
+                'images' => [],
+                'name' => $product->get_title(),
+                'on_sale' => $product->is_on_sale(),
+                'parent_id' => $product->get_parent_id(),
+                'permalink' => $product->get_permalink(),
+                'price' => (float) $product->get_price(),
+                'price_html' => $product->get_price_html(),
+                'regular_price' => (float) $product->get_regular_price(),
+                'sale_price' => (float) $product->get_sale_price(),
+                'sku' => $product->get_sku(),
+                'slug' => $product->get_slug(),
+                'status' => $product->get_status(),
+                'stock_quantity' => $product->get_stock_quantity(),
+                'stock_status' => $product->get_stock_status(),
+                'tags' => wp_get_object_terms($product->get_ID(), 'product_tag'),
+            ];
+
+            $documents[] = $document;
+            $count++;
+        }
+
+        $result = $client->getIndex($index)->addDocuments($documents);
+
+        $paged++;
+    } while (true);
+}

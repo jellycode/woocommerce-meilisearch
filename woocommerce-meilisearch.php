@@ -11,11 +11,8 @@
  * License URI:   http://opensource.org/licenses/MIT
  */
 
-/**
- * Prevent direct access
- */
-if (! defined('WPINC')) {
-    die;
+if ( ! defined( 'ABSPATH' ) ) {
+  exit; // Exit if accessed directly
 }
 
 /**
@@ -26,15 +23,27 @@ if (file_exists(__DIR__.'/vendor/autoload.php')) {
 }
 
 /**
- * register_my_style
+ * llWcmsRegisterStyles
  */
-function register_my_style()
+function llWcmsRegisterStyles()
 {
-    wp_register_style('woocommerce-meilisearch-style', plugins_url('/css/style.css', __FILE__ ));
-    wp_enqueue_style('woocommerce-meilisearch-style');
+    wp_register_style('woocommerce-meilisearch', plugins_url('/css/style.css', __FILE__ ));
+    wp_enqueue_style('woocommerce-meilisearch');
 }
 
-add_action('admin_init', 'register_my_style');
+add_action('admin_init', 'llWcmsRegisterStyles');
+
+/**
+ * llWcmsRegisterScripts
+ */
+function llWcmsRegisterScripts()
+{
+    wp_register_script('woocommerce-meilisearch', plugins_url('/js/woocommerce-meilisearch.js', __FILE__ ));
+    wp_enqueue_script('woocommerce-meilisearch');
+    wp_enqueue_script('meilisearch', 'https://cdn.jsdelivr.net/npm/meilisearch@latest/dist/bundles/meilisearch.umd.js');
+}
+
+add_action('admin_init', 'llWcmsRegisterScripts');
 
 /**
  * The core plugin class
