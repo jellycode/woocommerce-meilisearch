@@ -89,7 +89,8 @@ If you would like to see additional fields please submit an issue.
 Based on different WordPress / WooCommerce hooks a synchornisation process will run:
 
 * ```save_post``` - when a post with post_type ```product``` is created or updated
-* ```woocommerce_reduce_order_stock``` - when stock levels for a product are adjusted
+* ```update_post_meta``` - when postmeta belonging to a post with post_type ```product``` is updated
+* ```woocommerce_reduce_order_stock``` - when stock levels for a product are adjusted by placing an order
 
 ## Manual synchronisation
 The following options are available for the index.
