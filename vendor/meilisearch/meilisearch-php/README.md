@@ -29,21 +29,30 @@
 - [🔧 Installation](#-installation)
 - [🚀 Getting started](#-getting-started)
 - [🤖 Compatibility with MeiliSearch](#-compatibility-with-meilisearch)
-- [🎬 Examples](#-examples)
-  - [Indexes](#indexes)
-  - [Documents](#documents)
-  - [Update status](#update-status)
-  - [Search](#search)
-- [🧰 Replace HTTP client](#-replace-http-client)
+- [📖 Documentation and Examples](#-documentation-and-examples)
+- [🧰 HTTP Client Compatibilities](#-http-client-compatibilities)
+  - [Customize your HTTP Client](#customize-your-http-client)
 - [⚙️ Development Workflow and Contributing](#️-development-workflow-and-contributing)
 
 ## 🔧 Installation
 
-With composer:
+To get started, simply require the project using [Composer](https://getcomposer.org/).<br>
+You will also need to install packages that "provide" [`psr/http-client-implementation`](https://packagist.org/providers/psr/http-client-implementation) and [`psr/http-factory-implementation`](https://packagist.org/providers/psr/http-factory-implementation).<br>
+A list with compatible HTTP clients and client adapters can be found at [php-http.org](http://docs.php-http.org/en/latest/clients.html).
+
+**If you don't know which HTTP client to use, we recommend using Guzzle 7**:
 
 ```bash
-$ composer require meilisearch/meilisearch-php
+$ composer require meilisearch/meilisearch-php guzzlehttp/guzzle http-interop/http-factory-guzzle:^1.0
 ```
+
+Here is an example of installation with the `symfony/http-client`:
+
+```bash
+$ composer require meilisearch/meilisearch-php symfony/http-client nyholm/psr7:^1.0
+```
+
+💡 *More HTTP client installations compatible with this package can be found [in this section](#-http-client-compatibilities).*
 
 ### Run MeiliSearch <!-- omit in toc -->
 
@@ -84,10 +93,10 @@ $documents = [
 $index->addDocuments($documents); // => { "updateId": 0 }
 ```
 
-With the `updateId`, you can check the status (`processed` or `failed`) of your documents addition thanks to this [method](#update-status).
+With the `updateId`, you can check the status (`processed` or `failed`) of your documents addition thanks to this [method](https://docs.meilisearch.com/references/updates.html#get-an-update-status).
 
 
-#### Search in index <!-- omit in toc -->
+#### Basic search <!-- omit in toc -->
 
 ```php
 // MeiliSearch is typo-tolerant:
@@ -112,138 +121,6 @@ Array
     [processingTimeMs] => 1
     [query] => harry pottre
 )
-```
-
-## 🤖 Compatibility with MeiliSearch
-
-This package is compatible with the following MeiliSearch versions:
-- `v0.14.X`
-- `v0.13.X`
-
-## 🎬 Examples
-
-All HTTP routes of MeiliSearch are accessible via methods in this SDK.</br>
-You can check out [the API documentation](https://docs.meilisearch.com/references/).
-
-### Indexes
-
-#### Create an index <!-- omit in toc -->
-
-```php
-// Create an index
-$index = $client->createIndex('books');
-// Create an index and give the primary-key
-$index = $client->createIndex(
-    'books',
-    ['primaryKey' => 'book_id']
-);
-```
-
-#### Get an index or create it if it doesn't exist <!-- omit in toc -->
-```php
-// Get or create an index
-$index = $client->getOrCreateIndex('books');
-// Get or create an index and give the primary-key
-$index = $client->getOrCreateIndex(
-    'books',
-    ['primaryKey' => 'book_id']
-);
-```
-
-#### Get an index or create it if it doesn't exist <!-- omit in toc -->
-```php
-// Get or create an index
-$index = $client->getOrCreateIndex('books');
-// Get or create an index and give the primary-key
-$index = $client->getOrCreateIndex(
-    'books',
-    ['primaryKey' => 'book_id']
-);
-```
-
-#### List all indexes <!-- omit in toc -->
-
-```php
-$client->getAllIndexes();
-```
-
-#### Get an index object <!-- omit in toc -->
-
-```php
-$client->getIndex('books');
-```
-
-### Documents
-
-#### Fetch documents <!-- omit in toc -->
-
-```php
-// Get one document
-$index->getDocument(123);
-// Get documents by batch
-$index->getDocuments(['offset' => 10 , 'limit' => 20]);
-```
-
-#### Add documents <!-- omit in toc -->
-
-```php
-$index->addDocuments([['book_id' => 2, 'title' => 'Madame Bovary']])
-```
-
-Response:
-```json
-{
-    "updateId": 1
-}
-```
-With this `updateId` you can track your [operation update](#update-status).
-
-#### Delete documents <!-- omit in toc -->
-
-```php
-// Delete one document
-$index->deleteDocument(2);
-// Delete several documents
-$index->deleteDocuments([1, 42]);
-// Delete all documents /!\
-$index->deleteAllDocuments();
-```
-
-### Update status
-
-```php
-// Get one update status
-// Parameter: the updateId got after an asynchronous request (e.g. documents addition)
-$index->getUpdateStatus(1);
-// Get all update satus
-$index->getAllUpdateStatus();
-```
-
-### Search
-
-#### Basic search <!-- omit in toc -->
-
-```php
-$index->search('prince');
-```
-
-```json
-{
-    "hits": [
-        {
-            "book_id": 456,
-            "title": "Le Petit Prince"
-        },
-        {
-            "book_id": 4,
-            "title": "Harry Potter and the Half-Blood Prince"
-        }
-    ],
-    "offset": 0,
-    "limit": 20,
-    "processingTimeMs": 13,
-    "query": "prince"
-}
 ```
 
 #### Custom search <!-- omit in toc -->
@@ -278,26 +155,69 @@ $index->search('prince', ['limit' => 2, 'filters' => "title = 'Le Petit Prince' 
 $index->search('hobbit', ['limit' => 2, 'filters' => 'title = "The Hitchhiker\'s Guide to the Galaxy" OR author = "J. R. R. Tolkien"']);
 ```
 
-## 🧰 Replace HTTP client
+## 🤖 Compatibility with MeiliSearch
 
-By default [Guzzle](http://docs.guzzlephp.org/en/6.5/) is used for all HTTP requests.<br>
-But you can replace the used HTTP client with any [PSR-18](https://www.php-fig.org/psr/psr-18/) compatible client.<br>
-A list with compatible HTTP clients and client adapters can be found at [php-http.org](http://docs.php-http.org/en/latest/clients.html).
+This package only guarantees the compatibility with the [version v0.15.0 of MeiliSearch](https://github.com/meilisearch/MeiliSearch/releases/tag/v0.15.0).
 
-For example, if you want to use the [Symfony HttpClient](https://symfony.com/doc/current/components/http_client.html),
-use the following code:
+## 📖 Documentation and Examples
+
+MeiliSearch documentation provides **examples** and a detailed explanation of every one of its features and functionalities, including examples on how to implement them **using this SDK**.
+
+Please read the [guides available in the documentation](https://docs.meilisearch.com/guides/) or check the [API references](https://docs.meilisearch.com/references/) to find the one that you need!
+
+The following sections may interest you:
+
+- [Manipulate documents](https://docs.meilisearch.com/references/documents.html)
+- [Search](https://docs.meilisearch.com/references/search.html)
+- [Manage the indexes](https://docs.meilisearch.com/references/indexes.html)
+- [Configure the index settings](https://docs.meilisearch.com/references/settings.html)
+
+## 🧰 HTTP Client Compatibilities
+
+You could use any [PSR-18](https://www.php-fig.org/psr/psr-18/) compatible client to use with this SDK. No additional configurations are required.<br>
+A list of compatible HTTP clients and client adapters can be found at [php-http.org](http://docs.php-http.org/en/latest/clients.html).
+
+If you want to use this `meilisearch-php`:
+
+- with `guzzlehttp/guzzle` (Guzzle 7), run:
 
 ```bash
-$ composer require symfony/http-client
-$ composer require nyholm/psr7
+$ composer require meilisearch/meilisearch-php guzzlehttp/guzzle http-interop/http-factory-guzzle:^1.0
 ```
 
-```php
-use Symfony\Component\HttpClient\HttplugClient;
-use MeiliSearch\Client;
+- with `php-http/guzzle6-adapter` (Guzzle < 7), run:
 
-$httpClient = new HttplugClient();
-$client = new Client('http://127.0.0.1:7700', 'masterKey', $httpClient);
+```bash
+$ composer require meilisearch/meilisearch-php php-http/guzzle6-adapter:^2.0 http-interop/http-factory-guzzle:^1.0
+```
+
+- with `symfony/http-client`, run:
+
+```bash
+$ composer require meilisearch/meilisearch-php symfony/http-client nyholm/psr7:^1.0
+```
+
+- with `php-http/curl-client`, run:
+
+```bash
+$ composer require meilisearch/meilisearch-php php-http/curl-client nyholm/psr7:^1.0
+```
+
+- with `kriswallsmith/buzz`, run:
+
+```bash
+$ composer require meilisearch/meilisearch-php kriswallsmith/buzz nyholm/psr7:^1.0
+```
+
+### Customize your HTTP Client
+
+For some reason, you might want to pass a custom configuration to your own HTTP client.<br>
+Make sure you have a [PSR-18](https://www.php-fig.org/psr/psr-18/) compatible client when you initialize the MeiliSearch client.
+
+Following the example in the [Getting Started](#-getting-started) section, with the Guzzle HTTP client:
+
+```php
+new Client('http://127.0.0.1:7700', 'masterKey', new GuzzleHttpClient(['timeout' => 2]));
 ```
 
 ## ⚙️ Development Workflow and Contributing

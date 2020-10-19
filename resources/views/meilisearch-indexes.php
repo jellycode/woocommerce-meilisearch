@@ -1,41 +1,34 @@
 <?php
-if (isset($_GET['action']) && $_GET['action'] === 're-index') {
-  llWcmsReIndex($_GET['index']);
+if (isset($_GET['action'])) {
+  if ($_GET['action'] === 're-index') {
+    wcms_re_index($_GET['index']);
+  } elseif ($_GET['action'] === 'clear') {
+    wcms_clear_index($_GET['index']);
+  }
 }
-$client = new \MeiliSearch\Client('http://188.166.32.110:7700', 'KWzsqSuOT45Jj9Gnw0RF');
+
+$client = wcms_get_client();
 ?>
 
-<div class="wrap woocommerce">
+<div class="wrap">
   <h1>MeiliSearch</h1>
-  <form method="post" id="mainform" action="" enctype="multipart/form-data">
-    <h1 class="screen-reader-text">Indexes</h1>
-  </form>
+  <h2>Index</h2>
 
-  <!-- <h2>Keys</h2>
-  <?php $keys = $client->getKeys(); var_dump($keys); ?> -->
+  <?php
+  $index = $client->getIndex('wcms_products');
+  $stats = $index->stats();
+  // $searchableAttributes = $index->getSearchableAttributes();
+  // var_dump($searchableAttributes);
+  // $attributesForFaceting = $index->getAttributesForFaceting();
+  // var_dump($attributesForFaceting);
+  // $index->updateAttributesForFaceting([
+  //   'stock_status',
+  // ]);
+  $documents = $index->getDocuments();
+  echo '<li>'.$index->getUid().' ('.$stats['numberOfDocuments'].' products)</li>';
+  echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-indexes.php&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
 
-  <?php $indexes = $client->getAllIndexes(); ?>
-  <h2><?php echo count($indexes).' indexes'; ?></h2>
-  <?php 
-  echo '<ul style="list-style: disc; padding-left: 20px;">';
-  if ($indexes) {
-    foreach ($indexes as $index) {
-      $stats = $index->stats();
-      // $searchableAttributes = $index->getSearchableAttributes();
-      // var_dump($searchableAttributes);
-      // $attributesForFaceting = $index->getAttributesForFaceting();
-      // var_dump($attributesForFaceting);
-      // $index->updateAttributesForFaceting([
-      //   'stock_status',
-      // ]);
-      $documents = $index->getDocuments();
-      echo '<li>'.$index->getUid().' ('.$stats['numberOfDocuments'].' products)</li>';
-      echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-indexes.php&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
-
-      echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-indexes.php&action=clear&index='.$index->getUid().'">Clear '.$index->getUid().'</a>';
-    } 
-  }
-  echo '</ul>';
+  echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-indexes.php&action=clear&index='.$index->getUid().'">Clear '.$index->getUid().'</a>';
   ?> 
 
   <h2>Search</h2>

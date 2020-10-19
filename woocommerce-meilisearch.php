@@ -23,27 +23,45 @@ if (file_exists(__DIR__.'/vendor/autoload.php')) {
 }
 
 /**
- * llWcmsRegisterStyles
+ * wcms_register_styles.
  */
-function llWcmsRegisterStyles()
+function wcms_register_styles()
 {
     wp_register_style('woocommerce-meilisearch', plugins_url('/css/style.css', __FILE__ ));
     wp_enqueue_style('woocommerce-meilisearch');
 }
 
-add_action('admin_init', 'llWcmsRegisterStyles');
+add_action('admin_init', 'wcms_register_styles');
 
 /**
- * llWcmsRegisterScripts
+ * wcms_register_scripts.
  */
-function llWcmsRegisterScripts()
+function wcms_register_scripts()
 {
     wp_register_script('woocommerce-meilisearch', plugins_url('/js/woocommerce-meilisearch.js', __FILE__ ));
+  
     wp_enqueue_script('woocommerce-meilisearch');
     wp_enqueue_script('meilisearch', 'https://cdn.jsdelivr.net/npm/meilisearch@latest/dist/bundles/meilisearch.umd.js');
 }
+add_action('admin_init', 'wcms_register_scripts');
 
-add_action('admin_init', 'llWcmsRegisterScripts');
+/**
+ * wcms_admin_footer_js.
+ */
+function wcms_admin_footer_js()
+{
+    $options = get_option('wcms_plugin_options');
+
+    $client = wcms_get_client();
+    $keys = $client->getKeys();
+
+    if (! isset($options['hostname']) || ! isset($options['port']) || ! isset($keys['public'])) {
+      return;
+    }
+
+    echo '<script>var wcms = {"hostname": "'.$options['hostname'].'", "port": "'.$options['port'].'", public_key": "'.$keys['public'].'", "index": "wcms_products", }</script>';
+}
+add_action('admin_print_footer_scripts', 'wcms_admin_footer_js');
 
 /**
  * The core plugin class

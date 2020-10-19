@@ -11,11 +11,11 @@ class WooCommerceMeiliSearch
 }
 
 /**
- * llWcmsAddAdminMenuPage.
+ * wcms_add_admin_menu_pages.
  *
  * @return  void
  */
-function llWcmsAddAdminMenuPage() {
+function wcms_add_admin_menu_pages() {
     add_menu_page(
         __('MeiliSearch', 'meilisearch-woocommerce'),
         __('MeiliSearch', 'meilisearch-woocommerce'),
@@ -32,7 +32,6 @@ function llWcmsAddAdminMenuPage() {
         __('Indexes', 'meilisearch-woocommerce'),
         'manage_options',
         'woocommerce-meilisearch/resources/views/meilisearch-indexes.php',
-        ''
     );
 
     add_submenu_page(
@@ -41,50 +40,216 @@ function llWcmsAddAdminMenuPage() {
         __('Settings', 'meilisearch-woocommerce'),
         'manage_options',
         'woocommerce-meilisearch/resources/views/meilisearch-settings.php',
-        ''
     );
 }
-add_action('admin_menu', 'llWcmsAddAdminMenuPage');
+add_action('admin_menu', 'wcms_add_admin_menu_pages');
 
 /**
- * llWcmsGetClient
+ * wcms_register_settings.
+ * @return void
+ */
+function wcms_register_settings() 
+{
+    register_setting('wcms_plugin_options', 'wcms_plugin_options', 'wcms_plugin_options_validate');
+    
+    add_settings_section('server_settings', 'Server Settings', 'wcms_plugin_section_text', 'wcms_plugin');
+
+    add_settings_field('wcms_plugin_setting_hostname', 'Hostname', 'wcms_plugin_setting_hostname', 'wcms_plugin', 'server_settings');
+    add_settings_field('wcms_plugin_setting_port', 'Port', 'wcms_plugin_setting_port', 'wcms_plugin', 'server_settings');
+    add_settings_field('wcms_plugin_setting_master_key', 'Master Key', 'wcms_plugin_setting_master_key', 'wcms_plugin', 'server_settings');
+}
+add_action('admin_init', 'wcms_register_settings');
+
+/**
+ * wcms_plugin_section_text.
+ * @return string
+ */
+function wcms_plugin_section_text(): string
+{
+    return '';
+}
+
+/**
+ * wcms_plugin_setting_hostname.
+ * @return void
+ */
+function wcms_plugin_setting_hostname()
+{
+    $options = get_option('wcms_plugin_options');
+    echo '<input class="regular-text" id="wcms_plugin_setting_hostname" name="wcms_plugin_options[hostname]" type="text" value="'.esc_attr($options["hostname"]).'" />';
+}
+
+/**
+ * wcms_plugin_setting_port.
+ * @return void
+ */
+function wcms_plugin_setting_port()
+{
+    $options = get_option('wcms_plugin_options');
+    echo '<input class="regular-text" id="wcms_plugin_setting_port" name="wcms_plugin_options[port]" type="text" value="'.esc_attr($options["port"]).'" />';
+}
+
+/**
+ * wcms_plugin_setting_master_key.
+ * @return void
+ */
+function wcms_plugin_setting_master_key()
+{
+    $options = get_option('wcms_plugin_options');
+    echo '<input class="regular-text" id="wcms_plugin_setting_master_key" name="wcms_plugin_options[master_key]" type="text" value="'.esc_attr($options["master_key"]).'" />';
+}
+
+/**
+ * wcms_get_client.
  * 
  * @return \MeiliSearch\Client
  */
-function llWcmsGetClient()
+function wcms_get_client()
 {
-    return new Client('http://188.166.32.110:7700', 'KWzsqSuOT45Jj9Gnw0RF');
+    $options = get_option('wcms_plugin_options');
+    return new Client($options['hostname'].':'.$options['port'], $options['master_key']);
 }
 
 /**
- * llWcmsEmptyIndex.
+ * wcms_clear_index.
  * 
  * @param  string $name
  * @return bool      
  */
-function llWcmsEmptyIndex(string $name): bool
+function wcms_clear_index(string $name): bool
 {
-    $client = llWcmsGetClient();
+    $client = wcms_get_client();
     $client->getIndex($name)->deleteAllDocuments();
 
     return true;
 }
 
 /**
- * llWcmsUpdatePost.
+ * wcms_update_post.
  * 
  * @param  [type]  $id     
  * @param  WP_Post $post   
  * @param  [type]  $update 
  * @return [type]          
  */
-function llWcmsUpdatePost($id, WP_Post $post, $update)
+function wcms_update_post($id, WP_Post $post, $update)
 {
     if (get_post_type() !== 'product' || wp_is_post_revision($id) || wp_is_post_autosave($id)) {
         return $post;
     }
 
+    $document = wcms_document_from_post($post);
+
+    if (! $document) {
+        return $post;
+    }
+
+    $client = wcms_get_client();
+    $index = $client->getIndex('wcms_products');
+
+    $result = $index->addDocuments([
+        $document
+    ]);
+
+    if ('trash' === $post->post_status) {
+        $index->deleteDocument($document['ID']);
+    }
+
+    return $post;
+}
+add_action('save_post', 'wcms_update_post', 10, 3);
+
+/**
+ * wcms_update_post_meta.
+ * 
+ * @param  [type] $meta_id     
+ * @param  [type] $object_id   
+ * @param  [type] $meta_key    
+ * @param  [type] $meta_value 
+ * @return [type]                      
+ */
+function wcms_update_post_meta($meta_id, $object_id, $meta_key, $meta_value)
+{
+    // $indexedMetaKeys = ['seo_description', 'seo_title'];
+
+    // if (in_array($meta_key, $indexedMetaKeys)) {
+    //     $index = $algolia->initIndex(
+    //         apply_filters('algolia_index_name', 'post')
+    //     );
+
+    //     $index->partialUpdateObject([
+    //         'objectID' => 'post#'.$object_id,
+    //         $meta_key => $meta_value,
+    //     ]);
+    // }
+}
+add_action('update_post_meta', 'wcms_update_post_meta', 10, 4);
+
+/**
+ * wcms_update_post_stock
+ * @param  [type] $order_id 
+ * @return [type]           
+ */
+function wcms_update_post_stock($order_id)
+{
+    $order = wc_get_order( $order_id );
+
+    return $order_id;
+}
+add_action('woocommerce_reduce_order_stock', 'wcms_update_post_stock');
+
+/**
+ * wcms_re_index
+ * @param  string $index 
+ * @return void        
+ */
+function wcms_re_index($index)
+{
+    $client = wcms_get_client();
+    $client->getIndex($index)->deleteAllDocuments();
+
+    $paged = 1;
+    do {
+        $posts = new WP_Query([
+            'posts_per_page' => 10,
+            'paged' => $paged,
+            'post_type' => 'product',
+            'post_status' => 'publish',
+            'suppress_filters' => true,
+        ]);
+
+        if (! $posts->have_posts()) {
+            break;
+        }
+
+        $documents = [];
+        foreach ($posts->posts as $post) {
+            $document = wcms_document_from_post($post);
+            if (! $document) {
+                continue;
+            }
+
+            $documents[] = $document;
+        }
+
+        $result = $client->getIndex($index)->addDocuments($documents);
+
+        $paged++;
+    } while (true);
+}
+
+/**
+ * wcms_document_from_post
+ * @param  [type] $post 
+ * @return [type]       
+ */
+function wcms_document_from_post($post)
+{
     $product = new WC_Product($post->ID);
+
+    if ($product->get_catalog_visibility() !== 'visible') {
+        return false;
+    }
 
     $document = [
         'ID' => $product->get_ID(),
@@ -108,89 +273,9 @@ function llWcmsUpdatePost($id, WP_Post $post, $update)
         'tags' => wp_get_object_terms($product->get_ID(), 'product_tag'),
     ];
 
-    $client = llWcmsGetClient();
-    $index = $client->getIndex('wcms_products');
-
-    $result = $index->addDocuments([
-        $document
-    ]);
-
-    if ('trash' == $post->post_status) {
-        $index->deleteDocument($document['ID']);
+    if (is_plugin_active('sitepress-multilingual-cms/sitepress.php')) {
+        $document['wpml'] = apply_filters('wpml_post_language_details', null, $post->ID);
     }
 
-    return $post;
-}
-add_action('save_post', 'llWcmsUpdatePost', 10, 3);
-
-/**
- * llWcmsUpdatePostStock
- * @param  [type] $order_id 
- * @return [type]           
- */
-function llWcmsUpdatePostStock($order_id)
-{
-    return $order_id;
-}
-add_action('woocommerce_reduce_order_stock', 'llWcmsUpdatePostStock');
-
-/**
- * llWcmsReIndex
- * @param  string $index 
- * @return void        
- */
-function llWcmsReIndex($index)
-{
-    $client = llWcmsGetClient();
-    $client->getIndex($index)->deleteAllDocuments();
-
-    $paged = 1;
-    $count = 0;
-    do {
-        $posts = new WP_Query([
-            'posts_per_page' => 10,
-            'paged' => $paged,
-            'post_type' => 'product',
-            'post_status' => 'publish',
-            'suppress_filters' => true,
-        ]);
-
-        if (! $posts->have_posts()) {
-            break;
-        }
-
-        $documents = [];
-        foreach ($posts->posts as $post) {
-            $product = new WC_Product($post->ID);
-
-            $document = [
-                'ID' => $product->get_ID(),
-                'attributes' => $product->get_attributes(),
-                'categories' => get_the_terms($product->get_ID(), 'product_cat'),
-                'featured' => $product->get_featured(),
-                'images' => [],
-                'name' => $product->get_title(),
-                'on_sale' => $product->is_on_sale(),
-                'parent_id' => $product->get_parent_id(),
-                'permalink' => $product->get_permalink(),
-                'price' => (float) $product->get_price(),
-                'price_html' => $product->get_price_html(),
-                'regular_price' => (float) $product->get_regular_price(),
-                'sale_price' => (float) $product->get_sale_price(),
-                'sku' => $product->get_sku(),
-                'slug' => $product->get_slug(),
-                'status' => $product->get_status(),
-                'stock_quantity' => $product->get_stock_quantity(),
-                'stock_status' => $product->get_stock_status(),
-                'tags' => wp_get_object_terms($product->get_ID(), 'product_tag'),
-            ];
-
-            $documents[] = $document;
-            $count++;
-        }
-
-        $result = $client->getIndex($index)->addDocuments($documents);
-
-        $paged++;
-    } while (true);
+    return $document;
 }

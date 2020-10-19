@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MeiliSearch\Http;
 
-use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use MeiliSearch\Contracts\Http;
 use MeiliSearch\Exceptions\HTTPRequestException;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -49,17 +49,17 @@ class Client implements Http
      *
      * @param string $apiKey
      */
-    public function __construct(string $url, string $apiKey = null, ClientInterface $httpClient = null, RequestFactoryInterface $requestFactory = null, StreamFactoryInterface $streamFactory = null)
+    public function __construct(string $url, string $apiKey = null, ClientInterface $httpClient = null)
     {
         $this->baseUrl = $url;
         $this->apiKey = $apiKey;
-        $this->http = $httpClient ?: HttpClientDiscovery::find();
-        $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
-        $this->streamFactory = $streamFactory ?: Psr17FactoryDiscovery::findStreamFactory();
-        $this->headers = [
+        $this->http = $httpClient ?? Psr18ClientDiscovery::find();
+        $this->requestFactory = Psr17FactoryDiscovery::findRequestFactory();
+        $this->streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $this->headers = array_filter([
             'Content-type' => 'application/json',
             'X-Meili-API-Key' => $this->apiKey,
-        ];
+        ]);
     }
 
     /**
@@ -178,7 +178,7 @@ class Client implements Http
     private function parseResponse(ResponseInterface $response)
     {
         if ($response->getStatusCode() >= 300) {
-            $body = json_decode($response->getBody()->getContents(), true);
+            $body = json_decode($response->getBody()->getContents(), true) ?? $response->getReasonPhrase();
             throw new HTTPRequestException($response->getStatusCode(), $body);
         }
 

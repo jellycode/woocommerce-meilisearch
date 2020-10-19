@@ -9,11 +9,11 @@ function initWooCommerceMeiliSearch() {
 function searchWooCommerceMeiliSearch(terms) {
   (async () => {
     const client = new MeiliSearch({
-      host: 'http://188.166.32.110:7700',
-      apiKey: 'b4c3b63476439e0164b9a44efc38ff41c39b8e9c6229aa148d763aa611e8e06f',
+      host: `${wcms.hostname}:${wcms.port}`,
+      apiKey: wcms.public_key,
     })
 
-    const index = client.getIndex('wcms_products')
+    const index = client.getIndex(wcms.index)
     const result = await index.search(terms)
 
     const el = document.getElementById('wcms__search-hits')
