@@ -115,6 +115,8 @@ On short term we are aiming on adding support for the following plugins:
 * [WooCommerce Product Add-Ons](https://woocommerce.com/products/product-add-ons/)
 * [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/)
 
+If you would like to see support for additional plugins please submit an issue.
+
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
