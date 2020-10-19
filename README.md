@@ -1,6 +1,7 @@
 # MeiliSearch for WooCommerce
-MeiliSearch for WooCommerce is a WordPress plugin focussing on synchronising WooCommerce product data to MeiliSearch instances.
-The plugin is currently in development and a first release is expected in November 2020.
+[MeiliSearch](https://www.meilisearch.com/) for [WooCommerce](https://woocommerce.com/) is a WordPress plugin focussing on synchronising WooCommerce product data to MeiliSearch instances. Under the hood the plugin makes use of [MeiliSearch PHP](https://github.com/meilisearch/meilisearch-php)
+
+⚠️ The plugin is currently in development and a first release is expected in November 2020.
 
 ## Product data
 The following WooCommerce product data will be synced to the MeiliSearch instance:
