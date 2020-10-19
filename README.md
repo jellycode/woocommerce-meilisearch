@@ -102,8 +102,8 @@ If you would like to see additional synchronisation actions on different hooks p
 ## MeiliSearch instances
 The plugin will support the use of a single or multiple MeiliSearch instances:
 
-* Single instances mode
-* Multiple instance mode
+* Single instances mode - when using a single MeiliSearch instance
+* Multiple instance mode - when using multiple MeiliSearch instances and a load balancer
 
 ## Change log
 
