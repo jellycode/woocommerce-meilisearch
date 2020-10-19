@@ -26,6 +26,62 @@ The following WooCommerce product data will be synced to the MeiliSearch instanc
 * stock_status (string)
 * tags (array)
 
+```
+{
+   "ID": 320,
+   "attributes": [
+      
+   ],
+   "categories": [
+      {
+         "term_id": 446,
+         "name": "Animals",
+         "slug": "animals",
+         "term_group": 0,
+         "term_taxonomy_id": 446,
+         "taxonomy": "product_cat",
+         "description": "",
+         "parent": 0,
+         "count": 198,
+         "filter": "raw",
+         "term_order": "0"
+      }
+   ],
+   "featured": false,
+   "images": [
+      
+   ],
+   "name": "ACME",
+   "on_sale": false,
+   "parent_id": 0,
+   "permalink": "https://woocommerce-meilisearch.lamalama.nl/product/acme/",
+   "price": 9.3,
+   "price_html": "<span class=\"woocommerce-Price-amount amount\"><bdi><span class=\"woocommerce-Price-currencySymbol\">&euro;</span>9,30</bdi></span>",
+   "regular_price": 9.3,
+   "sale_price": 0,
+   "sku": "LL-001-01-01",
+   "slug": "acme",
+   "status": "publish",
+   "stock_quantity": 48,
+   "stock_status": "instock",
+   "tags": [
+      {
+         "term_id": 243,
+         "name": "ACME",
+         "slug": "acme",
+         "term_group": 0,
+         "term_taxonomy_id": 243,
+         "taxonomy": "product_tag",
+         "description": "",
+         "parent": 0,
+         "count": 294,
+         "filter": "raw",
+         "term_order": "0"
+      }
+   ]
+}
+```
+
 If you would like to see additional fields please submit an issue.
 
 ## Automatic synchronisation
