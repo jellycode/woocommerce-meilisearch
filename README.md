@@ -105,6 +105,8 @@ The plugin will support the use of a single or multiple MeiliSearch instances:
 * Single instances mode - when using a single MeiliSearch instance
 * Multiple instance mode - when using multiple MeiliSearch instances and a load balancer
 
+💡 TIP: You can easily set up a MeiliSearch instance on your favorite cloud provider (eg: Digital Ocean, AWS) via [Ploi.io](https://ploi.io/features/meilisearch-server)
+
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
