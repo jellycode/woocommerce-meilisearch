@@ -24,7 +24,6 @@ The following WooCommerce product data will be synced to the MeiliSearch instanc
 * stock_quantity (int)
 * stock_status (string)
 * tags (array)
-* TBD
 
 If you would like to see additional fields please submit an issue.
 
