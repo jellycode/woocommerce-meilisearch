@@ -36,8 +36,8 @@ The following WooCommerce product data will be synced to the MeiliSearch instanc
    "categories": [
       {
          "term_id": 446,
-         "name": "Animals",
-         "slug": "animals",
+         "name": "Sneakers",
+         "slug": "sneakers",
          "term_group": 0,
          "term_taxonomy_id": 446,
          "taxonomy": "product_cat",
@@ -68,8 +68,8 @@ The following WooCommerce product data will be synced to the MeiliSearch instanc
    "tags": [
       {
          "term_id": 243,
-         "name": "ACME",
-         "slug": "acme",
+         "name": "Bestseller",
+         "slug": "bestseller",
          "term_group": 0,
          "term_taxonomy_id": 243,
          "taxonomy": "product_tag",
