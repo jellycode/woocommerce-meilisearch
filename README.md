@@ -26,7 +26,7 @@ The following WooCommerce product data will be synced to the MeiliSearch instanc
 * tags (array)
 * TBD
 
-If you would like to see additional fields please submit a issue.
+If you would like to see additional fields please submit an issue.
 
 ## Automatic synchronisation
 Based on different WordPress / WooCommerce hooks a synchornisation process will run:
@@ -40,7 +40,7 @@ The following options are available for the index.
 * Re-index - Clear the index and synchronize all WooCommerce product data.
 * Clear - Clear the index
 
-If you would like to see additional synchronisation actions on different hooks please submit a issue.
+If you would like to see additional synchronisation actions on different hooks please submit an issue.
 
 ## MeiliSearch instances
 The plugin will support the use of a single or multiple MeiliSearch instances:
