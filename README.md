@@ -108,6 +108,13 @@ The plugin will support the use of a single or multiple MeiliSearch instances:
 
 💡 TIP: You can easily set up a MeiliSearch instance on your favorite cloud provider (eg: Digital Ocean, AWS) via [Ploi.io](https://ploi.io/features/meilisearch-server)
 
+## Plugin support
+On short term we are aiming on adding support for the following plugins:
+
+* [WPML](https://wpml.org/)
+* [WooCommerce Product Add-Ons](https://woocommerce.com/products/product-add-ons/)
+* [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/)
+
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
@@ -116,6 +123,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 - [Lama Lama](https://github.com/lamalamaNL)
 - [Mark de Vries](https://github.com/lamalamaMark)
+- [Edwin Fennema](https://github.com/edfen)
 
 ## License
 
