@@ -6,7 +6,7 @@
 ## Product data
 The following WooCommerce product data will be synced to the MeiliSearch instance:
 
-* ID: 19837 (int)
+* ID (int)
 * attributes (array)
 * categories (array)
 * featured (bool)
