@@ -26,6 +26,7 @@ The following WooCommerce product data will be synced to the MeiliSearch instanc
 * stock_status (string)
 * tags (array)
 
+## Hit response object
 ```
 {
    "ID": 320,
