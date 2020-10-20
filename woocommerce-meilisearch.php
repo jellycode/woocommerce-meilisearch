@@ -3,7 +3,7 @@
 /**
  * Plugin Name:   MeiliSearch for WooCommerce
  * Plugin URI:    https://docs.lamalama.nl/woocommerce-meilisearch
- * Description:   MeiliSearch for WooCommerce
+ * Description:   MeiliSearch for WooCommerce is a WordPress plugin focussing on synchronising WooCommerce product data to MeiliSearch instances.
  * Version:       1.0.0
  * Author:        Lama Lama
  * Author URI:    https://lamalama.nl
@@ -44,6 +44,21 @@ function wcms_register_scripts()
     wp_enqueue_script('meilisearch', 'https://cdn.jsdelivr.net/npm/meilisearch@latest/dist/bundles/meilisearch.umd.js');
 }
 add_action('admin_init', 'wcms_register_scripts');
+
+/**
+ * wcms_add_plugin_page_settings_link.
+ *
+ * @return  array
+ */
+function wcms_add_plugin_page_settings_link($links)
+{
+    $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-settings.php').'">'.__('Settings').'</a>';
+    $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-indexes.php').'">'.__('Index').'</a>';
+    $wcmsLinks[] = $links['deactivate'];
+
+    return $wcmsLinks;
+}
+add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'wcms_add_plugin_page_settings_link');
 
 /**
  * wcms_admin_footer_js.
