@@ -1,7 +1,5 @@
 <?php
 
-use MeiliSearch\Client;
-
 class WooCommerceMeiliSearch
 {
     public function bootstrap()
@@ -107,7 +105,22 @@ function wcms_plugin_setting_master_key()
 function wcms_get_client()
 {
     $options = get_option('wcms_plugin_options');
-    return new Client($options['hostname'].':'.$options['port'], $options['master_key']);
+    return new \MeiliSearch\Client($options['hostname'].':'.$options['port'], $options['master_key']);
+}
+
+/**
+ * wcms_get_index.
+ * 
+ * @param \MeiliSearch\Client $client
+ * @return index
+ */
+function wcms_get_index($client = null)
+{
+    if (! $client) {
+        $client = wcms_get_client();
+    }
+    
+    return $client->getOrCreateIndex('wcms_products');
 }
 
 /**

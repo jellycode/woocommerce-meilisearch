@@ -11,9 +11,7 @@
  * License URI:   http://opensource.org/licenses/MIT
  */
 
-if (! defined('ABSPATH')) {
-  exit; // Exit if accessed directly
-}
+defined('ABSPATH') || exit;
 
 /**
  * Import vendor
@@ -74,7 +72,7 @@ function wcms_admin_footer_js()
       return;
     }
 
-    echo '<script>var wcms = {"hostname": "'.$options['hostname'].'", "port": "'.$options['port'].'", public_key": "'.$keys['public'].'", "index": "wcms_products", }</script>';
+    echo '<script>var wcms = {"hostname": "'.$options['hostname'].'", "port": "'.$options['port'].'", "public_key": "'.$keys['public'].'", "index": "wcms_products", }</script>';
 }
 add_action('admin_print_footer_scripts', 'wcms_admin_footer_js');
 
@@ -82,15 +80,3 @@ add_action('admin_print_footer_scripts', 'wcms_admin_footer_js');
  * The core plugin class
  */
 require plugin_dir_path(__FILE__).'includes/class-plugin-meilisearch.php';
-
-/**
- * llWcmsBootstrap.
- * @return void
- */
-function llWcmsBootstrap()
-{
-    $plugin = new WooCommerceMeiliSearch();
-    $plugin->bootstrap();
-}
-
-llWcmsBootstrap();

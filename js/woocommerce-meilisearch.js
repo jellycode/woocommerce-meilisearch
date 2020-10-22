@@ -4,6 +4,8 @@ function initWooCommerceMeiliSearch() {
     const terms = event.target.value
     searchWooCommerceMeiliSearch(terms)
   })
+
+  searchWooCommerceMeiliSearch('')
 }
 
 function searchWooCommerceMeiliSearch(terms) {
@@ -20,7 +22,7 @@ function searchWooCommerceMeiliSearch(terms) {
     
     let html = '<ul>'
     result.hits.forEach(hit => {
-      html += `<li>${hit.name} - ${hit.price_html} - ${hit.stock_quantity || 0} units</li>`
+      html += `<li><a href="/wp-admin/post.php?post=${hit.ID}&action=edit">${hit.name} - ${hit.price_html}</a> - ${hit.stock_quantity || 0} units</li>`
     })
     html += '</ul>'
     el.innerHTML = html

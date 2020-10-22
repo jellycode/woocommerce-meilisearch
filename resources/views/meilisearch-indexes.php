@@ -6,8 +6,6 @@ if (isset($_GET['action'])) {
     wcms_clear_index($_GET['index']);
   }
 }
-
-$client = wcms_get_client();
 ?>
 
 <div class="wrap">
@@ -15,7 +13,8 @@ $client = wcms_get_client();
   <h2>Index</h2>
 
   <?php
-  $index = $client->getIndex('wcms_products');
+  $client = wcms_get_client();
+  $index = wcms_get_index($client);
   $stats = $index->stats();
   // $searchableAttributes = $index->getSearchableAttributes();
   // var_dump($searchableAttributes);
