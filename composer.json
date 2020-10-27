@@ -1,5 +1,0 @@
-{
-  "require": {
-    "meilisearch/meilisearch-php": "^0.15.0"
-  }
-}
