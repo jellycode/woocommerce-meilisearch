@@ -18,29 +18,51 @@ function wcms_add_admin_menu_pages() {
         __('MeiliSearch', 'meilisearch-woocommerce'),
         __('MeiliSearch', 'meilisearch-woocommerce'),
         'manage_options',
-        'woocommerce-meilisearch/resources/views/meilisearch-indexes.php',
-        '',
+        'woocommerce-meilisearch-indexes',
+        'wcms_views_indexes',
         'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYwIiBoZWlnaHQ9IjM2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIxMDcuMzMzIiB5PSIuMTUiIHdpZHRoPSIyNzQuMzE1IiBoZWlnaHQ9IjI3NC4zMTUiIHJ4PSI5OC44MzMiIHRyYW5zZm9ybT0icm90YXRlKDIzIDEwNy4zMzMgLjE1KSIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyKSIvPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNjEuMzMgMjMwLjE5OWMtMTUuMTA4LTM1LjU5MS0yMi42NjEtNTMuMzg2LTIzLjEyMi02OS44N2E4Ny4yODIgODcuMjgyIDAgMDEyNi4xODEtNjQuOGMxMS43ODMtMTEuNTM5IDI5LjU3OC0xOS4wOTIgNjUuMTY4LTM0LjIgMzUuNTktMTUuMTA3IDUzLjM4Ni0yMi42NiA2OS44Ny0yMy4xMjFhODcuMjgzIDg3LjI4MyAwIDAxNjQuODAxIDI2LjE4MWMxMS41MzggMTEuNzgzIDE5LjA5MSAyOS41NzggMzQuMTk4IDY1LjE2OCAxNS4xMDggMzUuNTkgMjIuNjYxIDUzLjM4NiAyMy4xMjIgNjkuODdhODcuMjg3IDg3LjI4NyAwIDAxLTI2LjE4MSA2NC44MDFjLTExLjc4MyAxMS41MzgtMjkuNTc4IDE5LjA5MS02NS4xNjggMzQuMTk4LTM1LjU5MSAxNS4xMDgtNTMuMzg2IDIyLjY2MS02OS44NyAyMy4xMjJhODcuMjg2IDg3LjI4NiAwIDAxLTY0LjgtMjYuMTgxYy0xMS41MzktMTEuNzgzLTE5LjA5Mi0yOS41NzgtMzQuMi02NS4xNjh6IiBmaWxsPSJ1cmwoI3BhaW50MV9saW5lYXIpIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yMTkuNTY4IDEzMC43NDhjMjIuNzk1IDAgMzkuNjk1IDE2LjcwMyAzOS42OTUgNDMuODIxdjU0LjQzMmgtMzIuMDMxdi00OS4zMjNjMC0xMy41NTktNi40ODUtMjAuMDQ0LTE3LjA5Ni0yMC4wNDQtNC45MTMgMC05LjgyNSAyLjE2Mi0xNC41NDEgNy44Ni4xOTYgMi4zNTguMzkzIDQuNzE2LjM5MyA3LjA3NXY1NC40MzJoLTMxLjgzNHYtNDkuMzIzYzAtMTMuNTU5LTYuNjgyLTIwLjA0NC0xNy4wOTctMjAuMDQ0LTQuOTEyIDAtOS42MjggMi4zNTgtMTQuMzQ1IDguNDV2NjAuOTE3aC0zMS44MzR2LTk1LjMwNmgzMS44MzR2NS42OTljNi40ODUtNS41MDIgMTMuMTY2LTguNjQ2IDIzLjc3OC04LjY0NiAxMS45ODcgMCAyMi4yMDUgNC41MTkgMjkuMjc5IDEyLjc3MiAxMC4wMjItOC44NDIgMTkuNjUxLTEyLjc3MiAzMy43OTktMTIuNzcyeiIgZmlsbD0iI2ZmZiIvPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9Ii0xMy42MjUiIHkxPSIxMjkuMjA4IiB4Mj0iMjQ0LjQ5IiB5Mj0iNDAzLjUyMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiNFNDEzNTkiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGMjNDNzkiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQxX2xpbmVhciIgeDE9IjExLjAwOSIgeTE9IjExMS42NSIgeDI9IjExMS42NSIgeTI9IjM0OC43NDciIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjMjQyMjJGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMkIyOTM3Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PC9zdmc+',
         58
     );
 
     add_submenu_page(
-        'woocommerce-meilisearch/resources/views/meilisearch-indexes.php',
+        'woocommerce-meilisearch-indexes',
         __('Indexes', 'meilisearch-woocommerce'),
         __('Indexes', 'meilisearch-woocommerce'),
         'manage_options',
-        'woocommerce-meilisearch/resources/views/meilisearch-indexes.php',
+        'woocommerce-meilisearch-indexes',
+        'wcms_views_indexes'
     );
 
     add_submenu_page(
-        'woocommerce-meilisearch/resources/views/meilisearch-indexes.php',
+        'woocommerce-meilisearch-indexes',
         __('Settings', 'meilisearch-woocommerce'),
         __('Settings', 'meilisearch-woocommerce'),
         'manage_options',
-        'woocommerce-meilisearch/resources/views/meilisearch-settings.php',
+        'woocommerce-meilisearch-settings',
+        'wcms_views_settings'
     );
 }
 add_action('admin_menu', 'wcms_add_admin_menu_pages');
+
+/**
+ * wcms_views_indexes.
+ */
+function wcms_views_indexes()
+{
+    $pluginDirPath = plugin_dir_path(__FILE__);
+
+    include($pluginDirPath.'../resources/views/meilisearch-indexes.php');
+}
+
+/**
+ * wcms_views_settings.
+ */
+function wcms_views_settings()
+{
+    $pluginDirPath = plugin_dir_path(__FILE__);
+    
+    include($pluginDirPath.'../resources/views/meilisearch-settings.php');
+}
 
 /**
  * wcms_register_settings.
@@ -105,6 +127,15 @@ function wcms_plugin_setting_master_key()
 function wcms_get_client()
 {
     $options = get_option('wcms_plugin_options');
+
+    if (! isset($options['hostname']) || ! isset($options['master_key'])) {
+        return false;
+    }
+
+    if (empty($options['hostname']) || empty($options['master_key'])) {
+        return false;
+    }
+
     return new \MeiliSearch\Client($options['hostname'].':'.$options['port'], $options['master_key']);
 }
 
@@ -114,10 +145,12 @@ function wcms_get_client()
  * @param \MeiliSearch\Client $client
  * @return index
  */
-function wcms_get_index($client = null)
+function wcms_get_index()
 {
+    $client = wcms_get_client();
+
     if (! $client) {
-        $client = wcms_get_client();
+        return false;
     }
     
     return $client->getOrCreateIndex('wcms_products');
