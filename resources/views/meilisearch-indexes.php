@@ -20,7 +20,7 @@ if (isset($_GET['action'])) {
     $documents = $index->getDocuments();
 
     echo '<li>'.$index->getUid().' ('.$stats['numberOfDocuments'].' products)</li>';
-    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearchindexes&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
+    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-indexes&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
 
     echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-indexes&action=clear&index='.$index->getUid().'">Clear '.$index->getUid().'</a>'; ?> 
 
