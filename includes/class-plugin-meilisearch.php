@@ -165,9 +165,12 @@ function wcms_get_index()
 function wcms_clear_index(string $name): bool
 {
     $client = wcms_get_client();
-    $client->getIndex($name)->deleteAllDocuments();
-
-    return true;
+    
+    if (! $client) {
+        return false;
+    }
+    
+    return $client->getIndex($name)->deleteAllDocuments();
 }
 
 /**
