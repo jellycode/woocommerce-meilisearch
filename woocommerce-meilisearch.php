@@ -50,8 +50,8 @@ add_action('admin_init', 'wcms_register_scripts');
  */
 function wcms_add_plugin_page_settings_link($links)
 {
-    $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-settings.php').'">'.__('Settings').'</a>';
-    $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-indexes.php').'">'.__('Index').'</a>';
+    $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch-settings').'">'.__('Settings').'</a>';
+    $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch-indexes').'">'.__('Index').'</a>';
     $wcmsLinks[] = $links['deactivate'];
 
     return $wcmsLinks;
