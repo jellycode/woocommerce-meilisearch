@@ -14,27 +14,25 @@ if (isset($_GET['action'])) {
 
   <?php
   $client = wcms_get_client();
-  $index = wcms_get_index($client);
-  $stats = $index->stats();
-  // $searchableAttributes = $index->getSearchableAttributes();
-  // var_dump($searchableAttributes);
-  // $attributesForFaceting = $index->getAttributesForFaceting();
-  // var_dump($attributesForFaceting);
-  // $index->updateAttributesForFaceting([
-  //   'stock_status',
-  // ]);
-  $documents = $index->getDocuments();
-  echo '<li>'.$index->getUid().' ('.$stats['numberOfDocuments'].' products)</li>';
-  echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-indexes.php&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
+  if ($client) :
+    $index = wcms_get_index();
+    $stats = $index->stats();
+    $documents = $index->getDocuments();
 
-  echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch/resources/views/meilisearch-indexes.php&action=clear&index='.$index->getUid().'">Clear '.$index->getUid().'</a>';
-  ?> 
+    echo '<li>'.$index->getUid().' ('.$stats['numberOfDocuments'].' products)</li>';
+    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearchindexes&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
 
-  <h2>Search</h2>
-  <form action="" id="wcms__search-form">
-    <input type="text" class="regular-text" id="wcms__search-terms" name="wcms_search" placeholder="Search while you type...">
-    <div id="wcms__search-hits">
-      <ul><li>There are no search results.</li></ul>
-    </div>
-  </form>
+    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-indexes&action=clear&index='.$index->getUid().'">Clear '.$index->getUid().'</a>'; ?> 
+
+    <h2>Search</h2>
+    <form action="" id="wcms__search-form">
+      <input type="text" class="regular-text" id="wcms__search-terms" name="wcms_search" placeholder="Search while you type...">
+      <div id="wcms__search-hits">
+        <ul><li>There are no search results.</li></ul>
+      </div>
+    </form>
+  <?php 
+  else :
+    echo 'Can\'t create the MeiliSearch Client. <a href="/wp-admin/admin.php?page=woocommerce-meilisearch-settings">Check the Server Settings.</a>';
+  endif; ?>
 </div>

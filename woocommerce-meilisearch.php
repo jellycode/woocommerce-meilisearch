@@ -66,6 +66,11 @@ function wcms_admin_footer_js()
     $options = get_option('wcms_plugin_options');
 
     $client = wcms_get_client();
+    
+    if (! $client) {
+        return;
+    }
+
     $keys = $client->getKeys();
 
     if (! isset($options['hostname']) || ! isset($options['port']) || ! isset($keys['public'])) {
