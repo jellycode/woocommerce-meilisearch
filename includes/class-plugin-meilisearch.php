@@ -210,8 +210,11 @@ function wcms_update_post($id, WP_Post $post, $update)
     }
 
     $client = wcms_get_client();
-    $index = $client->getIndex('wcms_products');
+    if (! $client) {
+        return $post;
+    }
 
+    $index = $client->getIndex('wcms_products');
     $result = $index->addDocuments([
         $document
     ]);
