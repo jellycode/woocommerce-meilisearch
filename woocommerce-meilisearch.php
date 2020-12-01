@@ -42,6 +42,7 @@ function wcms_register_scripts()
     wp_enqueue_script('meilisearch', 'https://cdn.jsdelivr.net/npm/meilisearch@latest/dist/bundles/meilisearch.umd.js');
 }
 add_action('admin_init', 'wcms_register_scripts');
+add_action('wp_enqueue_scripts', 'wcms_register_scripts');
 
 /**
  * wcms_add_plugin_page_settings_link.
@@ -51,7 +52,7 @@ add_action('admin_init', 'wcms_register_scripts');
 function wcms_add_plugin_page_settings_link($links)
 {
     $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch-settings').'">'.__('Settings').'</a>';
-    $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch-indexes').'">'.__('Index').'</a>';
+    $wcmsLinks[] = '<a href="'.admin_url('admin.php?page=woocommerce-meilisearch-index').'">'.__('Index').'</a>';
     $wcmsLinks[] = $links['deactivate'];
 
     return $wcmsLinks;
@@ -80,6 +81,7 @@ function wcms_admin_footer_js()
     echo '<script>var wcms = {"hostname": "'.$options['hostname'].'", "port": "'.$options['port'].'", "public_key": "'.$keys['public'].'", "index": "wcms_products", }</script>';
 }
 add_action('admin_print_footer_scripts', 'wcms_admin_footer_js');
+add_action('print_footer_scripts', 'wcms_admin_footer_js');
 
 /**
  * The core plugin class

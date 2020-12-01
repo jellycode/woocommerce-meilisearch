@@ -1,5 +1,9 @@
 function initWooCommerceMeiliSearch() {
   const el = document.getElementById('wcms__search-terms')
+  if (! el) {
+    return false
+  }
+
   el.addEventListener('keyup', (event) => {
     const terms = event.target.value
     searchWooCommerceMeiliSearch(terms)
@@ -16,7 +20,9 @@ function searchWooCommerceMeiliSearch(terms) {
     })
 
     const index = client.getIndex(wcms.index)
-    const result = await index.search(terms)
+    const result = await index.search(terms, {
+      facetsDistribution: ['*']
+    })
 
     const el = document.getElementById('wcms__search-hits')
     

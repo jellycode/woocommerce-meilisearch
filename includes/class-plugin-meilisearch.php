@@ -18,23 +18,32 @@ function wcms_add_admin_menu_pages() {
         __('MeiliSearch', 'meilisearch-woocommerce'),
         __('MeiliSearch', 'meilisearch-woocommerce'),
         'manage_options',
-        'woocommerce-meilisearch-indexes',
-        'wcms_views_indexes',
+        'woocommerce-meilisearch-index',
+        'wcms_views_index',
         'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYwIiBoZWlnaHQ9IjM2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIxMDcuMzMzIiB5PSIuMTUiIHdpZHRoPSIyNzQuMzE1IiBoZWlnaHQ9IjI3NC4zMTUiIHJ4PSI5OC44MzMiIHRyYW5zZm9ybT0icm90YXRlKDIzIDEwNy4zMzMgLjE1KSIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyKSIvPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNjEuMzMgMjMwLjE5OWMtMTUuMTA4LTM1LjU5MS0yMi42NjEtNTMuMzg2LTIzLjEyMi02OS44N2E4Ny4yODIgODcuMjgyIDAgMDEyNi4xODEtNjQuOGMxMS43ODMtMTEuNTM5IDI5LjU3OC0xOS4wOTIgNjUuMTY4LTM0LjIgMzUuNTktMTUuMTA3IDUzLjM4Ni0yMi42NiA2OS44Ny0yMy4xMjFhODcuMjgzIDg3LjI4MyAwIDAxNjQuODAxIDI2LjE4MWMxMS41MzggMTEuNzgzIDE5LjA5MSAyOS41NzggMzQuMTk4IDY1LjE2OCAxNS4xMDggMzUuNTkgMjIuNjYxIDUzLjM4NiAyMy4xMjIgNjkuODdhODcuMjg3IDg3LjI4NyAwIDAxLTI2LjE4MSA2NC44MDFjLTExLjc4MyAxMS41MzgtMjkuNTc4IDE5LjA5MS02NS4xNjggMzQuMTk4LTM1LjU5MSAxNS4xMDgtNTMuMzg2IDIyLjY2MS02OS44NyAyMy4xMjJhODcuMjg2IDg3LjI4NiAwIDAxLTY0LjgtMjYuMTgxYy0xMS41MzktMTEuNzgzLTE5LjA5Mi0yOS41NzgtMzQuMi02NS4xNjh6IiBmaWxsPSJ1cmwoI3BhaW50MV9saW5lYXIpIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yMTkuNTY4IDEzMC43NDhjMjIuNzk1IDAgMzkuNjk1IDE2LjcwMyAzOS42OTUgNDMuODIxdjU0LjQzMmgtMzIuMDMxdi00OS4zMjNjMC0xMy41NTktNi40ODUtMjAuMDQ0LTE3LjA5Ni0yMC4wNDQtNC45MTMgMC05LjgyNSAyLjE2Mi0xNC41NDEgNy44Ni4xOTYgMi4zNTguMzkzIDQuNzE2LjM5MyA3LjA3NXY1NC40MzJoLTMxLjgzNHYtNDkuMzIzYzAtMTMuNTU5LTYuNjgyLTIwLjA0NC0xNy4wOTctMjAuMDQ0LTQuOTEyIDAtOS42MjggMi4zNTgtMTQuMzQ1IDguNDV2NjAuOTE3aC0zMS44MzR2LTk1LjMwNmgzMS44MzR2NS42OTljNi40ODUtNS41MDIgMTMuMTY2LTguNjQ2IDIzLjc3OC04LjY0NiAxMS45ODcgMCAyMi4yMDUgNC41MTkgMjkuMjc5IDEyLjc3MiAxMC4wMjItOC44NDIgMTkuNjUxLTEyLjc3MiAzMy43OTktMTIuNzcyeiIgZmlsbD0iI2ZmZiIvPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9Ii0xMy42MjUiIHkxPSIxMjkuMjA4IiB4Mj0iMjQ0LjQ5IiB5Mj0iNDAzLjUyMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiNFNDEzNTkiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGMjNDNzkiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQxX2xpbmVhciIgeDE9IjExLjAwOSIgeTE9IjExMS42NSIgeDI9IjExMS42NSIgeTI9IjM0OC43NDciIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjMjQyMjJGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMkIyOTM3Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PC9zdmc+',
         58
     );
 
     add_submenu_page(
-        'woocommerce-meilisearch-indexes',
-        __('Indexes', 'meilisearch-woocommerce'),
-        __('Indexes', 'meilisearch-woocommerce'),
+        'woocommerce-meilisearch-index',
+        __('Index', 'meilisearch-woocommerce'),
+        __('Index', 'meilisearch-woocommerce'),
         'manage_options',
-        'woocommerce-meilisearch-indexes',
-        'wcms_views_indexes'
+        'woocommerce-meilisearch-index',
+        'wcms_views_index'
     );
 
     add_submenu_page(
-        'woocommerce-meilisearch-indexes',
+        'woocommerce-meilisearch-index',
+        __('Facets', 'meilisearch-woocommerce'),
+        __('Facets', 'meilisearch-woocommerce'),
+        'manage_options',
+        'woocommerce-meilisearch-facets',
+        'wcms_views_facets'
+    );
+
+    add_submenu_page(
+        'woocommerce-meilisearch-index',
         __('Settings', 'meilisearch-woocommerce'),
         __('Settings', 'meilisearch-woocommerce'),
         'manage_options',
@@ -45,13 +54,23 @@ function wcms_add_admin_menu_pages() {
 add_action('admin_menu', 'wcms_add_admin_menu_pages');
 
 /**
- * wcms_views_indexes.
+ * wcms_views_index.
  */
-function wcms_views_indexes()
+function wcms_views_index()
 {
     $pluginDirPath = plugin_dir_path(__FILE__);
 
-    include($pluginDirPath.'../resources/views/meilisearch-indexes.php');
+    include($pluginDirPath.'../resources/views/meilisearch-index.php');
+}
+
+/**
+ * wcms_views_facets.
+ */
+function wcms_views_facets()
+{
+    $pluginDirPath = plugin_dir_path(__FILE__);
+
+    include($pluginDirPath.'../resources/views/meilisearch-facets.php');
 }
 
 /**
@@ -165,12 +184,9 @@ function wcms_get_index()
 function wcms_clear_index(string $name): bool
 {
     $client = wcms_get_client();
-    
-    if (! $client) {
-        return false;
-    }
-    
-    return $client->getIndex($name)->deleteAllDocuments();
+    $client->getIndex($name)->deleteAllDocuments();
+
+    return true;
 }
 
 /**
@@ -200,7 +216,7 @@ function wcms_update_post($id, WP_Post $post, $update)
         $document
     ]);
 
-    if ('trash' === $post->post_status) {
+    if ('publish' !== $post->post_status) {
         $index->deleteDocument($document['ID']);
     }
 
@@ -294,15 +310,14 @@ function wcms_re_index($index)
  */
 function wcms_document_from_post($post)
 {
-    $product = new WC_Product($post->ID);
+    $product = wc_get_product($post->ID);
 
     if ($product->get_catalog_visibility() !== 'visible') {
         return false;
-    }
+    }  
 
     $document = [
         'ID' => $product->get_ID(),
-        'attributes' => $product->get_attributes(),
         'categories' => get_the_terms($product->get_ID(), 'product_cat'),
         'featured' => $product->get_featured(),
         'images' => [],
@@ -320,10 +335,38 @@ function wcms_document_from_post($post)
         'stock_quantity' => $product->get_stock_quantity(),
         'stock_status' => $product->get_stock_status(),
         'tags' => wp_get_object_terms($product->get_ID(), 'product_tag'),
+        'type' => $product->get_type(),
     ];
+
+    if ($featuredImage = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_ID()), 'single-post-thumbnail')) {
+        $document['featured_image'] = [
+            'url' => $featuredImage[0],
+            'width' => $featuredImage[1],
+            'height' => $featuredImage[2],
+        ];
+    }
+
+    $taxonomies = ['product_cat', 'product_tag'];
+    foreach ($taxonomies as $taxonomy) {
+        $terms = get_the_terms($product->get_ID(), $taxonomy);
+        if ($terms && ! is_wp_error($terms)) {
+            foreach ($terms as $term) {
+                $document[$taxonomy][] = $term->name;        
+            }
+        }
+    }
+
+    if ($product->is_type('variable')) {
+        $document['variations'] = $product->get_available_variations();
+    }
 
     if (is_plugin_active('sitepress-multilingual-cms/sitepress.php')) {
         $document['wpml'] = apply_filters('wpml_post_language_details', null, $post->ID);
+    }
+
+    foreach ($product->get_attributes() as $attribute) {
+        $attributeValues = $product->get_attribute($attribute->get_name());
+        $document[$attribute->get_name()] = explode(', ', $attributeValues);
     }
 
     return $document;

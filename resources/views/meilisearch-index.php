@@ -19,10 +19,13 @@ if (isset($_GET['action'])) {
     $stats = $index->stats();
     $documents = $index->getDocuments();
 
+    echo '<ul>';
     echo '<li>'.$index->getUid().' ('.$stats['numberOfDocuments'].' products)</li>';
-    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-indexes&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
+    echo '</ul>';
 
-    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-indexes&action=clear&index='.$index->getUid().'">Clear '.$index->getUid().'</a>'; ?> 
+    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-index&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
+
+    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-index&action=clear&index='.$index->getUid().'">Clear '.$index->getUid().'</a>'; ?> 
 
     <h2>Search</h2>
     <form action="" id="wcms__search-form">
