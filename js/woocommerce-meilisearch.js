@@ -20,9 +20,11 @@ function searchWooCommerceMeiliSearch(terms) {
     })
 
     const index = client.getIndex(wcms.index)
-    const result = await index.search(terms, {
-      facetsDistribution: ['*']
-    })
+    const params = {}
+    if (wcms.facets && wcms.facets.length) {
+      params.facetsDistribution = ['*']
+    }
+    const result = await index.search(terms, params)
 
     const el = document.getElementById('wcms__search-hits')
     

@@ -9,23 +9,20 @@ if (isset($_GET['action'])) {
 ?>
 
 <div class="wrap">
-  <h1>MeiliSearch</h1>
+  <h1>MeiliSearch for WooCommerce</h1>
   <h2>Index</h2>
 
   <?php
-  $client = wcms_get_client();
-  if ($client) :
-    $index = wcms_get_index();
+  if ($index = wcms_get_index()) :
     $stats = $index->stats();
     $documents = $index->getDocuments();
+    $indexUid = $index->getUid();
 
-    echo '<ul>';
-    echo '<li>'.$index->getUid().' ('.$stats['numberOfDocuments'].' products)</li>';
-    echo '</ul>';
+    echo '<p>'.$indexUid.' ('.$stats['numberOfDocuments'].' products)</p>';
 
-    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-index&action=re-index&index='.$index->getUid().'">Re-index '.$index->getUid().'</a>';
+    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-index&action=re-index&index='.$indexUid.'">Re-index</a>';
 
-    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-index&action=clear&index='.$index->getUid().'">Clear '.$index->getUid().'</a>'; ?> 
+    echo '<a class="button" href="/wp-admin/admin.php?page=woocommerce-meilisearch-index&action=clear&index='.$indexUid.'">Clear index</a>'; ?> 
 
     <h2>Search</h2>
     <form action="" id="wcms__search-form">

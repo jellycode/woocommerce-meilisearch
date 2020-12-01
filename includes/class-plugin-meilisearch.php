@@ -85,11 +85,13 @@ function wcms_views_settings()
 
 /**
  * wcms_register_settings.
+ * 
  * @return void
  */
 function wcms_register_settings() 
 {
     register_setting('wcms_plugin_options', 'wcms_plugin_options', 'wcms_plugin_options_validate');
+    register_setting('wcms_facets', 'wcms_facets', 'wcms_facets_validate');
     
     add_settings_section('server_settings', 'Server Settings', 'wcms_plugin_section_text', 'wcms_plugin');
 
@@ -101,6 +103,7 @@ add_action('admin_init', 'wcms_register_settings');
 
 /**
  * wcms_plugin_section_text.
+ * 
  * @return string
  */
 function wcms_plugin_section_text(): string
@@ -110,6 +113,7 @@ function wcms_plugin_section_text(): string
 
 /**
  * wcms_plugin_setting_hostname.
+ * 
  * @return void
  */
 function wcms_plugin_setting_hostname()
@@ -120,6 +124,7 @@ function wcms_plugin_setting_hostname()
 
 /**
  * wcms_plugin_setting_port.
+ * 
  * @return void
  */
 function wcms_plugin_setting_port()
@@ -130,6 +135,7 @@ function wcms_plugin_setting_port()
 
 /**
  * wcms_plugin_setting_master_key.
+ * 
  * @return void
  */
 function wcms_plugin_setting_master_key()
@@ -137,6 +143,29 @@ function wcms_plugin_setting_master_key()
     $options = get_option('wcms_plugin_options');
     echo '<input class="regular-text" id="wcms_plugin_setting_master_key" name="wcms_plugin_options[master_key]" type="text" value="'.esc_attr($options["master_key"]).'" />';
 }
+
+/**
+ * wcms_facets_update.
+ * 
+ * @return void
+ */
+function wcms_facets_update($option, $old_value, $value)
+{
+    if ($option === 'wcms_facets') {
+        $index = wcms_get_index();
+
+        if (! $index) {
+            return;
+        }
+
+        if (is_array($value)) {
+            $index->updateAttributesForFaceting($value); 
+        } else {
+            $index->resetAttributesForFaceting();
+        }
+    }
+}
+add_action('updated_option', 'wcms_facets_update', 10, 3);
 
 /**
  * wcms_get_client.

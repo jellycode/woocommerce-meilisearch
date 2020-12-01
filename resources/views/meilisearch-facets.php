@@ -9,21 +9,42 @@ if (isset($_GET['action'])) {
 ?>
 
 <div class="wrap">
-  <h1>MeiliSearch</h1>
+  <h1>MeiliSearch for WooCommerce</h1>
   <h2>Facets</h2>
 
-  <?php
-  $client = wcms_get_client();
-  if ($client) :
-    $index = wcms_get_index();
-    $facetingAttributes = $index->getAttributesForFaceting();
-    echo '<ul>';
-    foreach ($facetingAttributes as $facetingAttribute) {
-      echo '<li>'.$facetingAttribute.'</li>';
-    }
-    echo '</ul>';
-    // $index->updateAttributesForFaceting(['pa_storage', 'pa_size', 'pa_flavours', 'pa_ingredients', 'pa_lifeproof', 'product_cat', 'product_tag']);
-  ?>
-  <?php endif; ?>
+  <form action="options.php" method="post">
+    <?php settings_fields('wcms_facets'); ?>
+    <?php $wcms_facets = get_option('wcms_facets'); ?>
 
+    <?php
+    $checked = (isset($wcms_facets) && is_array($wcms_facets) && in_array('product_cat', $wcms_facets)) ? 'checked' : '';
+
+    echo '<div class="row">';
+    echo '<input type="checkbox" name="wcms_facets[]" value="product_cat" '.$checked.'>';
+    echo 'Product Category';
+    echo '</div>';
+    ?>
+
+    <?php
+    $checked = (isset($wcms_facets) && is_array($wcms_facets) && in_array('product_tag', $wcms_facets)) ? 'checked' : '';
+
+    echo '<div class="row">';
+    echo '<input type="checkbox" name="wcms_facets[]" value="product_tag" '.$checked.'>';
+    echo 'Product Tag';
+    echo '</div>';
+    ?>
+
+    <?php
+    foreach(wc_get_attribute_taxonomies() as $attribute) {
+      $checked = (isset($wcms_facets) && is_array($wcms_facets) && in_array('pa_'.$attribute->attribute_name, $wcms_facets)) ? 'checked' : '';
+
+      echo '<div class="row">';
+      echo '<input type="checkbox" name="wcms_facets[]" value="pa_'.$attribute->attribute_name.'" '.$checked.'>';
+      echo 'Product Attribute - '.$attribute->attribute_label;
+      echo '</div>';
+    }
+    ?>
+    <br>
+    <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Save'); ?>" />
+  </form>
 </div>

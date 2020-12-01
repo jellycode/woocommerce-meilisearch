@@ -1,5 +1,6 @@
 <div class="wrap">
-  <h1>MeiliSearch</h1>
+  <h1>MeiliSearch for WooCommerce</h1>
+  
   <form action="options.php" method="post">
       <?php 
       settings_fields('wcms_plugin_options');
