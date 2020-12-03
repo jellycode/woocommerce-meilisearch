@@ -1,13 +1,5 @@
 <?php
 
-class WooCommerceMeiliSearch
-{
-    public function bootstrap()
-    {
-
-    }
-}
-
 /**
  * wcms_add_admin_menu_pages.
  *

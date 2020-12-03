@@ -84,6 +84,7 @@ add_action('admin_print_footer_scripts', 'wcms_admin_footer_js');
 add_action('print_footer_scripts', 'wcms_admin_footer_js');
 
 /**
- * The core plugin class
+ * Plugin files
  */
-require plugin_dir_path(__FILE__).'includes/class-plugin-meilisearch.php';
+require plugin_dir_path(__FILE__).'includes/wcms-plugin.php';
+require plugin_dir_path(__FILE__).'includes/wcms-shortcode.php';
