@@ -1,7 +1,7 @@
 # MeiliSearch for WooCommerce
 [MeiliSearch](https://www.meilisearch.com/) for [WooCommerce](https://woocommerce.com/) is a WordPress plugin focussing on synchronising WooCommerce product data to MeiliSearch instances. Under the hood the plugin makes use of [MeiliSearch PHP](https://github.com/meilisearch/meilisearch-php)
 
-⚠️ The plugin is currently in development and a first release is expected in November 2020. Please check the [develop](https://github.com/lamalamaNL/woocommerce-meilisearch/tree/develop) branch to track progress and/or contribute.
+⚠️ The plugin is currently in development. Please check the [develop](https://github.com/lamalamaNL/woocommerce-meilisearch/tree/develop) branch to track progress and/or contribute.
 
 ## Product data
 The following WooCommerce product data will be synced to the MeiliSearch instance:
@@ -106,7 +106,9 @@ The plugin will support the use of a single or multiple MeiliSearch instances:
 * Single instances mode - when using a single MeiliSearch instance
 * Multiple instance mode - when using multiple MeiliSearch instances and a load balancer
 
-💡 TIP: You can easily set up a MeiliSearch instance on your favorite cloud provider (eg: Digital Ocean, AWS) via [Ploi.io](https://ploi.io/features/meilisearch-server)
+💡 TIPS: You can easily set up a MeiliSearch instance on your favorite cloud provider (eg: Digital Ocean, AWS) via 
+* [Ploi.io](https://ploi.io/features/meilisearch-server)
+* [Forge](https://blog.laravel.com/forge-meilisearch-server-type#:~:text=MeiliSearch%20is%20an%20open%20source,indexing%20your%20content%20right%20away!)
 
 ## Plugin support
 On short term we are aiming on adding support for the following plugins:
