@@ -72,7 +72,15 @@ function wcms_admin_footer_js()
 		return;
 	}
 
-	$keys = $client->getKeys();
+	$keys = [];
+
+	try {
+
+		$keys = $client->getKeys();
+	} catch (Exception $e) {
+		ray($e);
+	}
+
 
 	if (!isset($options['hostname']) || !isset($options['port']) || !isset($keys['public'])) {
 		return;
