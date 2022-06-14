@@ -4,60 +4,100 @@ declare(strict_types=1);
 
 namespace MeiliSearch\Endpoints;
 
+use DateTime;
 use Exception;
 use MeiliSearch\Contracts\Endpoint;
 use MeiliSearch\Contracts\Http;
+use MeiliSearch\Contracts\Index\Settings;
 use MeiliSearch\Endpoints\Delegates\HandlesDocuments;
 use MeiliSearch\Endpoints\Delegates\HandlesSettings;
-use MeiliSearch\Exceptions\HTTPRequestException;
-use MeiliSearch\Exceptions\TimeOutException;
+use MeiliSearch\Endpoints\Delegates\HandlesTasks;
+use MeiliSearch\Exceptions\ApiException;
+use MeiliSearch\Search\SearchResult;
 
 class Indexes extends Endpoint
 {
     use HandlesDocuments;
     use HandlesSettings;
+    use HandlesTasks;
 
     protected const PATH = '/indexes';
 
-    /**
-     * @var string|null
-     */
-    private $uid;
+    private ?string $uid;
+    private ?string $primaryKey;
+    private ?string $createdAt;
+    private ?string $updatedAt;
+    private Tasks $tasks;
 
-    public function __construct(Http $http, $uid = null)
+    public function __construct(Http $http, $uid = null, $primaryKey = null, $createdAt = null, $updatedAt = null)
     {
         $this->uid = $uid;
+        $this->primaryKey = $primaryKey;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
+        $this->tasks = new Tasks($http);
+
         parent::__construct($http);
+    }
+
+    protected function newInstance(array $attributes): self
+    {
+        return new self(
+            $this->http,
+            $attributes['uid'],
+            $attributes['primaryKey'],
+            $attributes['createdAt'],
+            $attributes['updatedAt'],
+        );
     }
 
     /**
      * @return $this
-     *
-     * @throws Exception|HTTPRequestException
      */
-    public function create(string $uid, array $options = []): self
+    protected function fill(array $attributes): self
+    {
+        $this->uid = $attributes['uid'];
+        $this->primaryKey = $attributes['primaryKey'];
+        $this->createdAt = $attributes['createdAt'];
+        $this->updatedAt = $attributes['updatedAt'];
+
+        return $this;
+    }
+
+    /**
+     * @throws Exception|ApiException
+     */
+    public function create(string $uid, array $options = []): array
     {
         $options['uid'] = $uid;
 
-        $response = $this->http->post(self::PATH, $options);
-
-        return new self($this->http, $response['uid']);
+        return $this->http->post(self::PATH, $options);
     }
 
     public function all(): array
     {
         $indexes = [];
 
-        foreach ($this->http->get(self::PATH) as $index) {
-            $indexes[] = new self($this->http, $index['uid']);
+        foreach ($this->allRaw() as $index) {
+            $indexes[] = $this->newInstance($index);
         }
 
         return $indexes;
     }
 
+    public function allRaw(): array
+    {
+        return $this->http->get(self::PATH);
+    }
+
     public function getPrimaryKey(): ?string
     {
-        return $this->show()['primaryKey'];
+        return $this->primaryKey;
+    }
+
+    public function fetchPrimaryKey(): ?string
+    {
+        return $this->fetchInfo()->getPrimaryKey();
     }
 
     public function getUid(): ?string
@@ -65,14 +105,41 @@ class Indexes extends Endpoint
         return $this->uid;
     }
 
-    public function show(): ?array
+    public function getCreatedAt(): ?DateTime
+    {
+        return static::parseDate($this->createdAt);
+    }
+
+    public function getCreatedAtString(): ?string
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTime
+    {
+        return static::parseDate($this->updatedAt);
+    }
+
+    public function getUpdatedAtString(): ?string
+    {
+        return $this->updatedAt;
+    }
+
+    public function fetchRawInfo(): ?array
     {
         return $this->http->get(self::PATH.'/'.$this->uid);
     }
 
+    public function fetchInfo(): self
+    {
+        $response = $this->fetchRawInfo();
+
+        return $this->fill($response);
+    }
+
     public function update($body): array
     {
-        return  $this->http->put(self::PATH.'/'.$this->uid, $body);
+        return $this->http->put(self::PATH.'/'.$this->uid, $body);
     }
 
     public function delete(): array
@@ -80,48 +147,42 @@ class Indexes extends Endpoint
         return $this->http->delete(self::PATH.'/'.$this->uid) ?? [];
     }
 
-    // Updates
+    // Tasks
 
-    public function getUpdateStatus($updateId): array
+    public function getTask($uid): array
     {
-        return $this->http->get(self::PATH.'/'.$this->uid.'/updates/'.$updateId);
+        return $this->http->get(self::PATH.'/'.$this->uid.'/tasks'.'/'.$uid);
     }
 
-    public function getAllUpdateStatus(): array
+    public function getTasks(): array
     {
-        return $this->http->get(self::PATH.'/'.$this->uid.'/updates');
-    }
-
-    /**
-     * @param $updateId
-     * @param int $timeoutInMs
-     * @param int $intervalInMs
-     *
-     * @return mixed
-     *
-     * @throws TimeOutException
-     */
-    public function waitForPendingUpdate($updateId, $timeoutInMs = 5000, $intervalInMs = 50): array
-    {
-        $timeout_temp = 0;
-        while ($timeoutInMs > $timeout_temp) {
-            $res = $this->getUpdateStatus($updateId);
-            if ('enqueued' != $res['status']) {
-                return $res;
-            }
-            $timeout_temp += $intervalInMs;
-            usleep(1000 * $intervalInMs);
-        }
-        throw new TimeOutException();
+        return $this->http->get(self::PATH.'/'.$this->uid.'/tasks');
     }
 
     // Search
 
-    public function search($query, array $options = []): array
+    /**
+     * @return SearchResult|array
+     */
+    public function search(?string $query, array $searchParams = [], array $options = [])
+    {
+        $result = $this->rawSearch($query, $searchParams);
+
+        if (\array_key_exists('raw', $options) && $options['raw']) {
+            return $result;
+        }
+
+        $searchResult = new SearchResult($result);
+        $searchResult->applyOptions($options);
+
+        return $searchResult;
+    }
+
+    public function rawSearch(?string $query, array $searchParams = []): array
     {
         $parameters = array_merge(
             ['q' => $query],
-            $options
+            $searchParams
         );
 
         return $this->http->post(self::PATH.'/'.$this->uid.'/search', $parameters);
@@ -138,7 +199,8 @@ class Indexes extends Endpoint
 
     public function getSettings(): array
     {
-        return $this->http->get(self::PATH.'/'.$this->uid.'/settings');
+        return (new Settings($this->http->get(self::PATH.'/'.$this->uid.'/settings')))
+            ->getIterator()->getArrayCopy();
     }
 
     public function updateSettings($settings): array
@@ -149,5 +211,25 @@ class Indexes extends Endpoint
     public function resetSettings(): array
     {
         return $this->http->delete(self::PATH.'/'.$this->uid.'/settings');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function parseDate(?string $dateTime): ?DateTime
+    {
+        if (null === $dateTime) {
+            return null;
+        }
+
+        try {
+            return new DateTime($dateTime);
+        } catch (\Exception $e) {
+            // Trim 9th+ digit from fractional seconds. Meilisearch server can send 9 digits; PHP supports up to 8
+            $trimPattern = '/(^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,8})(?:\d{1,})?(Z|[\+-]\d{2}:\d{2})$/';
+            $trimmedDate = preg_replace($trimPattern, '$1$2', $dateTime);
+
+            return new DateTime($trimmedDate);
+        }
     }
 }

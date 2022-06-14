@@ -110,8 +110,12 @@ function wcms_plugin_section_text(): string
  */
 function wcms_plugin_setting_hostname()
 {
-    $options = get_option('wcms_plugin_options');
-    echo '<input class="regular-text" id="wcms_plugin_setting_hostname" name="wcms_plugin_options[hostname]" type="text" value="'.esc_attr($options["hostname"]).'" />';
+	$hostname_value = '';
+	$options = get_option('wcms_plugin_options');
+	if ($options) {
+		$hostname_value = esc_attr($options['hostname']);
+	}
+	echo '<input class="regular-text" id="wcms_plugin_setting_hostname" name="wcms_plugin_options[hostname]" type="text" value="' . $hostname_value . '" />';
 }
 
 /**
@@ -121,8 +125,13 @@ function wcms_plugin_setting_hostname()
  */
 function wcms_plugin_setting_port()
 {
-    $options = get_option('wcms_plugin_options');
-    echo '<input class="regular-text" id="wcms_plugin_setting_port" name="wcms_plugin_options[port]" type="text" value="'.esc_attr($options["port"]).'" />';
+
+	$port_value = '';
+	$options = get_option('wcms_plugin_options');
+	if ($options) {
+		$port_value = esc_attr($options['port']);
+	}
+	echo '<input class="regular-text" id="wcms_plugin_setting_port" name="wcms_plugin_options[port]" type="text" value="' . $port_value . '" />';
 }
 
 /**
@@ -132,8 +141,13 @@ function wcms_plugin_setting_port()
  */
 function wcms_plugin_setting_master_key()
 {
-    $options = get_option('wcms_plugin_options');
-    echo '<input class="regular-text" id="wcms_plugin_setting_master_key" name="wcms_plugin_options[master_key]" type="text" value="'.esc_attr($options["master_key"]).'" />';
+	$master_key_value = '';
+	$options = get_option('wcms_plugin_options');
+	if ($options) {
+		$master_key_value = esc_attr($options['master_key']);
+	}
+	$input = '<input type="text" class="regular-text" id="wcms_plugin_setting_master_key" name="wcms_plugin_options[master_key]" value="' . $master_key_value . '" />';
+	echo $input;
 }
 
 /**
@@ -189,11 +203,13 @@ function wcms_get_index()
 {
     $client = wcms_get_client();
 
-    if (! $client) {
-        return false;
-    }
-    
-    return $client->getOrCreateIndex('wcms_products');
+	if (!$client) {
+		return false;
+	}
+	$index = $client->createIndex('wcms_products'); // If your index does not exist
+	$index = $client->getIndex('wcms_products');    // If you already created your index
+
+	return $index;
 }
 
 /**

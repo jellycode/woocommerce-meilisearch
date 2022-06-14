@@ -6,5 +6,10 @@ namespace MeiliSearch;
 
 class MeiliSearch
 {
-    const VERSION = '0.15.0';
+    public const VERSION = '0.23.2';
+
+    public static function qualifiedVersion()
+    {
+        return sprintf('Meilisearch PHP (v%s)', MeiliSearch::VERSION);
+    }
 }
