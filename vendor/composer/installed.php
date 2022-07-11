@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '8e0f0ed507edd806da15f0f5510f72e4717123ac',
+        'reference' => 'e61ed53b3ef324a0723a5a6cb984628698229d80',
         'name' => 'jellycode/woocommerce-meilisearch',
         'dev' => true,
     ),
@@ -20,12 +20,12 @@
             'dev_requirement' => false,
         ),
         'jellycode/woocommerce-meilisearch' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '8e0f0ed507edd806da15f0f5510f72e4717123ac',
+            'reference' => 'e61ed53b3ef324a0723a5a6cb984628698229d80',
             'dev_requirement' => false,
         ),
         'meilisearch/meilisearch-php' => array(
@@ -68,12 +68,12 @@
             ),
         ),
         'php-http/discovery' => array(
-            'pretty_version' => '1.14.2',
-            'version' => '1.14.2.0',
+            'pretty_version' => '1.14.3',
+            'version' => '1.14.3.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../php-http/discovery',
             'aliases' => array(),
-            'reference' => 'c8d48852fbc052454af42f6de27635ddd916b959',
+            'reference' => '31d8ee46d0215108df16a8527c7438e96a4d7735',
             'dev_requirement' => false,
         ),
         'php-http/httplug' => array(

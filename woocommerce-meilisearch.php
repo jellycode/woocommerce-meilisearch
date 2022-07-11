@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name:   MeiliSearch for WooCommerce
- * Plugin URI:    https://lamalama.nl
+ * Plugin URI:    https://jellycode.com
  * Description:   MeiliSearch for WooCommerce is a WordPress plugin focussing on synchronising WooCommerce product data to MeiliSearch instances.
- * Version:       0.0.2
- * Author:        Lama Lama
- * Author URI:    https://lamalama.nl
+ * Version:       1.0.1
+ * Author:        Jellycode
+ * Author URI:    https://jellycode.com
  * License:       MIT
  * License URI:   http://opensource.org/licenses/MIT
  */

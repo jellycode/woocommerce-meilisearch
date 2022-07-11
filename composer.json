@@ -1,20 +1,5 @@
 {
 	"name": "jellycode/woocommerce-meilisearch",
-	"repositories": [
-		{
-			"type": "package",
-			"package": {
-				"name": "jellycode/woocommerce-meilisearch",
-				"version": "v0.0.3",
-				"type": "wordpress-plugin",
-				"source": {
-					"url": "https://github.com/jellycode/woocommerce-meilisearch",
-					"type": "git",
-					"reference": "master"
-				}
-			}
-		}
-	],
 	"require": {
 		"meilisearch/meilisearch-php": "^0.23.2",
 		"symfony/http-client": "^6.0.9",
