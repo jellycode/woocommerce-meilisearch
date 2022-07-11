@@ -86,6 +86,7 @@ function wcms_views_settings()
  */
 function wcms_register_settings()
 {
+	//ray('register');
 	register_setting('wcms_plugin_options', 'wcms_plugin_options', 'wcms_plugin_options_validate');
 	register_setting('wcms_facets', 'wcms_facets', 'wcms_facets_validate');
 
@@ -161,6 +162,7 @@ function wcms_plugin_setting_master_key()
  */
 function wcms_facets_update($option, $old_value, $value)
 {
+	//ray('facets');
 	if ($option === 'wcms_facets') {
 		$index = wcms_get_index();
 
@@ -184,7 +186,10 @@ add_action('updated_option', 'wcms_facets_update', 10, 3);
  */
 function wcms_get_client()
 {
+	//ray('client');
+	$client = null;
 	$options = get_option('wcms_plugin_options');
+	//ray($options);
 
 	if (!isset($options['hostname']) || !isset($options['master_key'])) {
 		return false;
@@ -194,7 +199,15 @@ function wcms_get_client()
 		return false;
 	}
 
-	return new \MeiliSearch\Client($options['hostname'] . ':' . $options['port'], $options['master_key']);
+	try {
+		$client =
+			new \MeiliSearch\Client($options['hostname'] . ':' . $options['port'], $options['master_key']);
+	} catch (Exception $e) {
+		//ray($e);
+		return false;
+	}
+
+	return $client;
 }
 
 /**
@@ -205,6 +218,7 @@ function wcms_get_client()
  */
 function wcms_get_index()
 {
+	//ray('get index');
 	$client = wcms_get_client();
 
 	if (!$client) {
@@ -224,6 +238,7 @@ function wcms_get_index()
  */
 function wcms_clear_index(string $name): bool
 {
+	//ray('clear index');
 	$client = wcms_get_client();
 	$client->getIndex($name)->deleteAllDocuments();
 
@@ -240,6 +255,7 @@ function wcms_clear_index(string $name): bool
  */
 function wcms_update_post($id, WP_Post $post, $update)
 {
+	//ray('update post');
 	if (get_post_type() !== 'product' || wp_is_post_revision($id) || wp_is_post_autosave($id)) {
 		return $post;
 	}
@@ -301,6 +317,7 @@ add_action('update_post_meta', 'wcms_update_post_meta', 10, 4);
  */
 function wcms_update_post_stock($order_id)
 {
+	//ray('update post stock');
 	$order = wc_get_order($order_id);
 
 	return $order_id;
@@ -314,6 +331,7 @@ add_action('woocommerce_reduce_order_stock', 'wcms_update_post_stock');
  */
 function wcms_re_index($index)
 {
+	//ray('re index');
 	$client = wcms_get_client();
 	$client->getIndex($index)->deleteAllDocuments();
 
@@ -356,15 +374,18 @@ function wcms_re_index($index)
  */
 function wcms_document_from_post($post)
 {
+	//ray('document from post');
 	$product = wc_get_product($post->ID);
 
 	if ($product->get_catalog_visibility() !== 'visible') {
 		return false;
 	}
 
+	$productId = $product->get_ID();
+
 	$document = [
-		'ID' => $product->get_ID(),
-		'categories' => get_the_terms($product->get_ID(), 'product_cat'),
+		'ID' => $productId,
+		'categories' => get_the_terms($productId, 'product_cat'),
 		'featured' => $product->get_featured(),
 		'images' => [],
 		'name' => $product->get_title(),
@@ -380,14 +401,14 @@ function wcms_document_from_post($post)
 		'status' => $product->get_status(),
 		'stock_quantity' => $product->get_stock_quantity(),
 		'stock_status' => $product->get_stock_status(),
-		'tags' => wp_get_object_terms($product->get_ID(), 'product_tag'),
+		'tags' => wp_get_object_terms($productId, 'product_tag'),
 		'type' => $product->get_type(),
-		'full_inventory' => Product::get_product_inventory($product->get_ID())
+		'full_inventory' => Product::get_product_inventory($productId)
 	];
 
-	$document = array_merge($document, Product::get_product_inventory($product->get_ID(), true));
+	$document = array_merge($document, Product::get_product_inventory($productId, true));
 
-	if ($featuredImage = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_ID()), 'single-post-thumbnail')) {
+	if ($featuredImage = wp_get_attachment_image_src(get_post_thumbnail_id($productId), 'single-post-thumbnail')) {
 		$document['featured_image'] = [
 			'url' => $featuredImage[0],
 			'width' => $featuredImage[1],
@@ -401,7 +422,7 @@ function wcms_document_from_post($post)
 
 	$taxonomies = ['product_cat', 'product_tag'];
 	foreach ($taxonomies as $taxonomy) {
-		$terms = get_the_terms($product->get_ID(), $taxonomy);
+		$terms = get_the_terms($productId, $taxonomy);
 		if ($terms && !is_wp_error($terms)) {
 			foreach ($terms as $term) {
 				$document[$taxonomy][] = $term->name;
