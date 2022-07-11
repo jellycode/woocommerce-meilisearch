@@ -4,7 +4,7 @@
  * Plugin Name:   MeiliSearch for WooCommerce
  * Plugin URI:    https://jellycode.com
  * Description:   MeiliSearch for WooCommerce is a WordPress plugin focussing on synchronising WooCommerce product data to MeiliSearch instances.
- * Version:       1.0.4
+ * Version:       1.0.5
  * Author:        Jellycode
  * Author URI:    https://jellycode.com
  * License:       MIT
@@ -36,7 +36,6 @@ add_action('admin_init', 'wcms_register_styles');
  */
 function wcms_register_scripts()
 {
-	//ray('register');
 	wp_register_script('woocommerce-meilisearch', plugins_url('/js/woocommerce-meilisearch.js', __FILE__));
 
 	wp_enqueue_script('woocommerce-meilisearch');
@@ -67,27 +66,30 @@ function wcms_admin_footer_js()
 {
 	$options = get_option('wcms_plugin_options');
 
-	try {
-
-		$client = wcms_get_client();
-	} catch (Exception $e) {
-
-		return false;
-	}
-
-
+	$client = wcms_get_client();
 
 	if (!$client) {
 		return;
+	}
+
+	$keys = [];
+
+	try {
+
+		$keys = $client->getKeys();
+	} catch (Exception $e) {
+		ray($e);
 	}
 
 
 	if (!isset($options['hostname']) || !isset($options['port']) || !isset($keys['public'])) {
 		return;
 	}
+
+	echo '<script>var wcms = {"hostname": "' . $options['hostname'] . '", "port": "' . $options['port'] . '", "public_key": "' . $keys['public'] . '", "index": "wcms_products", }</script>';
 }
-//add_action('admin_print_footer_scripts', 'wcms_admin_footer_js');
-//add_action('print_footer_scripts', 'wcms_admin_footer_js');
+add_action('admin_print_footer_scripts', 'wcms_admin_footer_js');
+add_action('print_footer_scripts', 'wcms_admin_footer_js');
 
 /**
  * Plugin files
