@@ -242,7 +242,7 @@ function wcms_update_post($id, WP_Post $post, $update)
 		return $post;
 	}
 
-	$document = do_action('wcms_document_from_post', $post);
+	$document = apply_filters('wcms_document_from_post', $post);
 
 	if (!$document) {
 		return $post;
@@ -333,7 +333,7 @@ function wcms_re_index($index)
 
 		$documents = [];
 		foreach ($posts->posts as $post) {
-			$document = do_action('wcms_document_from_post', $post);
+			$document = apply_filters('wcms_document_from_post', $post);
 			if (!$document) {
 				continue;
 			}
@@ -341,13 +341,13 @@ function wcms_re_index($index)
 			$documents[] = $document;
 		}
 
-
 		$result = $client->getIndex($index)->addDocuments($documents);
 
 		$paged++;
 	} while (true);
 
-	do_action('wcms_filterable_attributes', $client, $index);
+
+	apply_filters('wcms_filterable_attributes', $client, $index);
 }
 
 function wcms_document_from_post($post)
@@ -356,9 +356,8 @@ function wcms_document_from_post($post)
 }
 function wcms_filterable_attributes($client, $index)
 {
-	ray('old');
 	return true;
 }
 
-add_action('wcms_document_from_post', 'wcms_document_from_post', 10);
-add_action('wcms_filterable_attributes', 'wcms_filterable_attributes', 10, 2);
+add_filter('wcms_document_from_post', 'wcms_document_from_post', 10);
+add_filter('wcms_filterable_attributes', 'wcms_filterable_attributes', 10, 2);
